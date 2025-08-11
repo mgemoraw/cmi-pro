@@ -1,0 +1,14 @@
+django
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+django-filter
+psycopg2-binary
+python-dotenv
+django-environ
+django-extensions
+django-geojson
+django-redis
+django-bootstrap-v5
+django-crispy-forms
+
