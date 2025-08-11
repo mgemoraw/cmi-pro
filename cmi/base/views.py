@@ -4,6 +4,24 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'base/home.html')
 
+def dashboard(request):
+    context = {
+        "truck_data": [
+            {"id": "TRK-021", "productivity": 85},
+            {"id": "TRK-044", "productivity": 78},
+        ],
+        "excavator_data": [
+            {"id": "EXC-114", "productivity": 74},
+        ],
+        "dozer_data": [
+            {"id": "DOZ-007", "productivity": 66},
+        ],
+        "labor_data": [
+            {"id": "LAB-033", "productivity": 72},
+        ]
+    }
+    return render(request, 'base/dashboard.html', context=context)
+
 def about(request):
     return render(request, 'base/about.html')
 

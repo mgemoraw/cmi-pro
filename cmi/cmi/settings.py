@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # created apps
-    'django_bootstrap5',
+    # 'django_bootstrap5',
+    'core.apps.CoreConfig',
     'base.apps.BaseConfig',
     'particular.apps.ParticularConfig',
 ]

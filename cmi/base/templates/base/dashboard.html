@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<!-- Bootstrap & FontAwesome -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+  .sidebar {
+    min-height: 100vh;
+    background-color: #343a40;
+  }
+  .sidebar .nav-link {
+    color: #fff;
+  }
+  .sidebar .nav-link.active {
+    background-color: #495057;
+  }
+  .card-stat {
+    border-left: 5px solid #0d6efd;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav class="col-md-2 d-none d-md-block sidebar py-4">
+      <div class="nav flex-column">
+        <h4 class="text-white text-center mb-4">CMI-Pro</h4>
+        <a class="nav-link active" href="#"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
+        <a class="nav-link" href="#"><i class="fas fa-truck me-2"></i> Truck</a>
+        <a class="nav-link" href="#"><i class="fas fa-dumpster me-2"></i> Excavator</a>
+        <a class="nav-link" href="#"><i class="fas fa-industry me-2"></i> Dozer</a>
+        <a class="nav-link" href="#"><i class="fas fa-users me-2"></i> Labor</a>
+        <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i> Work Items</a>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="col-md-10 ms-sm-auto px-md-4">
+      <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Dashboard Overview</h2>
+      </div>
+
+      <!-- Equipment Tabs -->
+      <ul class="nav nav-tabs mb-4" id="equipmentTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="truck-tab" data-bs-toggle="tab" data-bs-target="#truck" type="button" role="tab">Truck</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="excavator-tab" data-bs-toggle="tab" data-bs-target="#excavator" type="button" role="tab">Excavator</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="dozer-tab" data-bs-toggle="tab" data-bs-target="#dozer" type="button" role="tab">Dozer</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="labor-tab" data-bs-toggle="tab" data-bs-target="#labor" type="button" role="tab">Labor</button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="labor-tab" data-bs-toggle="tab" data-bs-target="#labor" type="button" role="tab">Labor</button>
+        </li>
+      </ul>
+      
+
+      <!-- KPI Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card card-stat shadow-sm p-3 mb-3">
+            <h6>Total Work Items</h6>
+            <h3>118</h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card card-stat shadow-sm p-3 mb-3">
+            <h6>Avg Truck Productivity</h6>
+            <h3>80%</h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card card-stat shadow-sm p-3 mb-3">
+            <h6>Excavator Efficiency</h6>
+            <h3>74%</h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card card-stat shadow-sm p-3 mb-3">
+            <h6>Labor Utilization</h6>
+            <h3>65%</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Contents -->
+      <div class="tab-content" id="equipmentTabContent">
+        <!-- Truck -->
+        <div class="tab-pane fade show active" id="truck" role="tabpanel">
+          {% include 'base/includes/equipment_card.html' with title='Truck Productivity' chart_id='truckChart' equipment_data=truck_data %}
+        </div>
+
+        <!-- Excavator -->
+        <div class="tab-pane fade" id="excavator" role="tabpanel">
+          {% include 'base/includes/equipment_card.html' with title='Excavator Productivity' chart_id='excavatorChart' equipment_data=excavator_data %}
+        </div>
+
+        <!-- Dozer -->
+        <div class="tab-pane fade" id="dozer" role="tabpanel">
+          {% include 'base/includes/equipment_card.html' with title='Dozer Productivity' chart_id='dozerChart' equipment_data=dozer_data %}
+        </div>
+
+        <!-- Labor -->
+        <div class="tab-pane fade" id="labor" role="tabpanel">
+          {% include 'base/includes/equipment_card.html' with title='Labor Productivity' chart_id='laborChart' equipment_data=labor_data %}
+        </div>
+      </div>
+      <!-- Charts and Tables -->
+      <div class="row">
+        <!-- Chart -->
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Equipment Productivity Trend</h5>
+              <canvas id="productivityChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Top Performing Equipment</h5>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>ID</th>
+                    <th>Productivity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Truck</td>
+                    <td>TRK-021</td>
+                    <td>85%</td>
+                  </tr>
+                  <tr>
+                    <td>Excavator</td>
+                    <td>EXC-114</td>
+                    <td>78%</td>
+                  </tr>
+                  <tr>
+                    <td>Labor</td>
+                    <td>LAB-033</td>
+                    <td>72%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('productivityChart').getContext('2d');
+  const productivityChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+      datasets: [{
+        label: 'Truck',
+        data: [65, 75, 78, 80],
+        borderColor: '#0d6efd',
+        fill: false
+      },
+      {
+        label: 'Excavator',
+        data: [60, 68, 72, 74],
+        borderColor: '#ffc107',
+        fill: false
+      },
+      {
+        label: 'Labor',
+        data: [50, 55, 60, 65],
+        borderColor: '#198754',
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100
+        }
+      }
+    }
+  });
+
+
+  function renderChart(ctxId, label, dataPoints, color) {
+    new Chart(document.getElementById(ctxId).getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+          label: label,
+          data: dataPoints,
+          borderColor: color,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  }
+
+  // Initialize all charts
+  renderChart('truckChart', 'Truck', [65, 75, 78, 80], '#0d6efd');
+  renderChart('excavatorChart', 'Excavator', [60, 68, 72, 74], '#ffc107');
+  renderChart('dozerChart', 'Dozer', [55, 60, 66, 70], '#dc3545');
+  renderChart('laborChart', 'Labor', [50, 55, 60, 65], '#198754');
+
+</script>
+{% endblock %}
