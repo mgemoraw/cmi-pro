@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>CMI-Pro Dashboard</title>
         <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/output.css' %}" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <style>
             body {
@@ -32,13 +33,14 @@
             <div class="row">
                 <!-- Sidebar -->
                 <nav class="col-md-2 d-none d-md-block sidebar py-4">
-                    <div class="nav flex-column">
+                    <div class="nav flex-column ">
                         <h4 class="text-white text-center mb-4">CMI-Pro</h4>
                         <a class="nav-link {% if request.path == '/bit/' %} active {% endif %}" href="{% url 'core:dashboard' %}"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
-                        <a class="nav-link {% if request.path == '/bit/truck/' %}
-                            active {% endif %}" href="{% url 'core:truck' %}"><i class="fas fa-truck me-2"></i> Truck</a>
-                        <a class="nav-link" href="#"><i class="fas fa-dumpster me-2"></i> Excavator</a>
-                        <a class="nav-link" href="#"><i class="fas fa-dumpster me-2"></i> Dozer</a>
+                        <a class="nav-link {% if request.path == '/bit/projects/' %} active {% endif %}" href="{% url 'core:projects' %}"><i class="fas fa-fill me-2"></i> Projects</a>
+                        <a class="nav-link {% if request.path == '/bit/particulars/' %} active {% endif %}" href="{% url 'core:particulars' %}"><i class="fas fa-activity me-2"></i> Particulars</a>
+                        <a class="nav-link {% if request.path == '/bit/truck/' %} active {% endif %}" href="{% url 'core:truck' %}"><i class="fas fa-truck me-2"></i> Truck</a>
+                        <a class="nav-link " href="#"><i class="fas fa-dumpster me-2"></i> Excavator</a>
+                        <a class="nav-link" href="#"><i class="fas fa-buildozer me-2"></i> Dozer</a>
                         <a class="nav-link" href="#"><i class="fas fa-users me-2"></i> Labor</a>
                         <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i> Work Items</a>
                         <a class="nav-link" href="#"><i class="fas fa-industry me-2"></i> Work Sampling</a>
@@ -54,6 +56,9 @@
         {% block scripts %}
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         {% endblock %}
+
+        {% comment %} <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> {% endcomment %}
+
                 
     </body>
 </html>

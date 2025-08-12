@@ -1,7 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import TipperDataModelForm
+from .forms import TipperDataModelForm, ProjectForm
+from .models import (
+    Project,
+    Tipper,
+)
+
+
 
 # Create your views here.
 
@@ -30,6 +36,47 @@ def trucks(request):
     form = TipperDataModelForm(request.POST or None)
 
     return render(request, 'core/truck.html', {'form':form })
+
+
+def projects(request):
+    projects = Project.objects.all()
+    form = ProjectForm(request.POST or None)
+
+    return render(request, 'core/projects.html', {'projects': projects, 'form': form})
+
+def create_project(request):
+    if request.method == 'POST':
+        # name = request.POST.get("name")
+        # description = request.POST.get("description")
+        # code = request.POST.get("code")
+        # region = request.POST.get("region")
+        # zone = request.POST.get("zone")
+        # woreda = request.POST.get("woreda")
+        # kebele = request.POST.get("kebele")
+        # town = request.POST.get("town")
+        # latitude = request.POST.get("latitude")
+        # longitude = request.POST.get("longitude")
+
+        # # create new project
+        # new_project = Project.objects.create(
+        #     name=name,
+        #     code=code,
+        #     description=description,
+        #     region=region,
+        #     zone=zone,
+        #     woreda=woreda,
+        #     kebele=kebele,
+        #     town=town,
+        #     latitude=latitude,
+        #     longitude=longitude,
+        # )
+
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('core:projects')
+    return redirect('core:projects')
+
 
 def truck_create(request):
     if request.method == 'POST':
