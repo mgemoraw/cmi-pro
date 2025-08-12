@@ -106,6 +106,8 @@
       <div class="modal-body">
         <form method="post" id="truckForm">
           {% csrf_token %}
+          {{form.as_p}}
+
           <div class="mb-3">
             <label for="truckId" class="form-label">Truck ID</label>
             <input type="text" class="form-control" id="truckId" name="truck_id">
