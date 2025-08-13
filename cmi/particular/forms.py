@@ -1,0 +1,39 @@
+# particular/forms.py
+
+from django import forms
+from .models import Particular, DivisionModel, ProjectType
+
+class ParticularForm(forms.ModelForm):
+    """
+    A ModelForm for the Particular model, used to create and update Particular instances.
+    It automatically generates form fields based on the Particular model's fields.
+    """
+    class Meta:
+        model = Particular
+        # Specify the fields to include in the form.
+        # 'pid', 'division', 'project_type', 'task', 'element', 'name'
+        # are required for creating a new particular.
+        # 'data_collection_days' and 'collected_days' can also be included
+        # if you want them to be editable upon creation, otherwise they can
+        # be handled by default values or in the view.
+        fields = [
+            'pid',
+            'division',
+            'project_type',
+            'task',
+            'element',
+            'name',
+            'data_collection_days', # Include if you want this editable on creation
+            'collected_days'        # Include if you want this editable on creation
+        ]
+        # Optional: Add widgets for custom form input types or attributes
+        widgets = {
+            'pid': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unique Particular ID'}),
+            'division': forms.Select(attrs={'class': 'form-control'}),
+            'project_type': forms.Select(attrs={'class': 'form-control'}),
+            'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task description'}),
+            'element': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Element description'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Particular Name'}),
+            'data_collection_days': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
+            'collected_days': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+        }

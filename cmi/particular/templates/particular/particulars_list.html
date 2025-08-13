@@ -1,0 +1,63 @@
+<!-- your_app_name/templates/particular_list.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Particulars List{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">All Particulars</h2>
+        <a href="{% url 'particular:create_particular' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105">
+            + Add New Particular
+        </a>
+    </div>
+
+    {% if particulars %}
+        <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">PID</th>
+                        <th class="py-3 px-6 text-left">Name</th>
+                        <th class="py-3 px-6 text-left">Division</th>
+                        <th class="py-3 px-6 text-left">Project Type</th>
+                        <th class="py-3 px-6 text-left">Task</th>
+                        <th class="py-3 px-6 text-left">Element</th>
+                        <th class="py-3 px-6 text-center">Data Collection Days</th>
+                        <th class="py-3 px-6 text-center">Collected Days</th>
+                        <th class="py-3 px-6 text-center">Progress (%)</th>
+                        <!-- Add more headers as needed -->
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700 text-sm font-light">
+                    {% for particular in particulars %}
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-3 px-6 text-left whitespace-nowrap">{{ particular.pid }}</td>
+                        <td class="py-3 px-6 text-left">{{ particular.name }}</td>
+                        <td class="py-3 px-6 text-left">{{ particular.division.name }}</td>
+                        <td class="py-3 px-6 text-left">{{ particular.project_type.name }}</td>
+                        <td class="py-3 px-6 text-left">{{ particular.task }}</td>
+                        <td class="py-3 px-6 text-left">{{ particular.element }}</td>
+                        <td class="py-3 px-6 text-center">{{ particular.data_collection_days }}</td>
+                        <td class="py-3 px-6 text-center">{{ particular.collected_days }}</td>
+                        <td class="py-3 px-6 text-center">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ particular.progress|floatformat:0 }}%"></div>
+                            </div>
+                            <span class="text-xs text-gray-600 mt-1 block">{{ particular.progress|floatformat:2 }}%</span>
+                        </td>
+                        <!-- Add more data cells as needed -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center text-gray-600 text-lg">No particulars found. How about <a href="{% url 'particular:create_particular' %}" class="text-blue-500 hover:underline">creating one</a>?</p>
+    {% endif %}
+</div>
+
+<!-- Add Tailwind CSS via CDN for styling -->
+<script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}

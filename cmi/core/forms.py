@@ -40,9 +40,6 @@ class TipperDataModelForm(forms.ModelForm):
 
 
 
-  
-    
-
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
@@ -88,3 +85,4 @@ class ProjectForm(forms.ModelForm):
     #             field.widget.attrs['class'] = 'form-select'
     #         else:
     #             field.widget.attrs['class'] = 'form-control'
+

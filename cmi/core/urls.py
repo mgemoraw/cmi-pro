@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from particular.views import particulars_view
+from particular.views import particular_list
 
 
 app_name = 'core'
@@ -10,7 +10,7 @@ urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('projects/', views.projects, name='projects'),
     path('projects/create/', views.create_project, name='create_project'),
-    path('particulars/', particulars_view, name='particulars'),
+    path('particulars/', particular_list, name='particulars'),
     path('truck/', views.trucks, name='truck'),
     path('truck/create/', views.trucks, name='truck_create'),
     path('login/', views.login_view, name='login'),

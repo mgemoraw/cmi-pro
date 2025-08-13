@@ -17,7 +17,7 @@
             This interface helps you track productivity, manage resources, and streamline operations on your construction projects.
             </p>
 
-            <a href="#" class="btn btn-primary btn-lg px-4">Explore Particulars</a>
+            <a href="{% url 'core:dashboard' %}" class="btn btn-primary btn-lg px-4">Explore Dashboard</a>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Particulars</h5>
                     <p class="card-text">Access detailed data on daily tasks, equipment, labor, and more.</p>
-                    <a href="#" class="btn btn-outline-primary btn-sm">Go to Particulars</a>
+                    <a href="{% url 'particular:particular_list' %}" class="btn btn-outline-primary btn-sm">Go to Particulars</a>
                 </div>
             </div>
         </div>
