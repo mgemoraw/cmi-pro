@@ -88,3 +88,5 @@ def truck_create(request):
         # Truck.objects.create(...)
 
         return redirect('core:truck', )  # or render with success msg
+
+

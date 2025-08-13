@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content%}
+<div>
+    <form method="POST" action="{% url 'particular:create_equipment' %}">
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <div class="row">
+            <button type='submit'>Create Equipment </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

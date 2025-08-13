@@ -6,8 +6,10 @@ app_name = "particular"
 
 
 urlpatterns = [
+    path('', views.particular_list, name='particulars'), # Optional: for redirection
     path('index/', views.index, name='index'),
-    path('', views.particular_list, name='particular_list'), # Optional: for redirection
-    path('particulars/create/', views.create_particular, name='create_particular'),
+    path('create/', views.create_particular, name='create_particular'),
+    path('import/', views.import_from_file, name='import_from_file'),
+    path('equipments/create/', views.create_equipment, name='create_equipment'),
 ]
 

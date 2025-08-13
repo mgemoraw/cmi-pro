@@ -1,0 +1,271 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main class="col-md-10 ms-sm-auto px-md-4">
+
+  <!-- Page Title -->
+  <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Projects Overview</h2>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3">  
+        <h6>Active Projects</h6>
+        <h3>4</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3">
+        <h6>Active Particulars</h6>
+        <h3>20</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3 color-green">
+        <h6>Data Collectors</h6>
+        <h3>25</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3">
+        <h6>Average Daily Activity</h6>
+        <h3>80</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="row mb-4">
+    <div class="col-md-12 ">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckFormModal">
+        Add New Project
+      </button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckImportModal">
+        Import from File
+      </button>
+      <button class="btn btn-white " data-bs-toggle="modal" data-bs-target="#">
+        <span class="fa-download"> </span>
+        Download Excel Template
+      </button>
+     
+     
+    </div>
+  </div>
+
+  <!-- Truck Details Table -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm p-3 mb-3">
+        <h5 class="card-title">Project Details</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Project ID</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Collectors</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for project in projects %}
+            <tr>
+              <td>{{project.code}}</td>
+              <td>{{project.name}}</td>
+              <td>{{project.zone}}</td>
+              <td>{{project.woreda}}</td>
+            </tr>
+            {% endfor %}
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Productivity Chart -->
+  <div class="row">
+    <div class="col-md-12 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Project Productivity Trends</h5>
+          <canvas id="truckProductivityChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- 🚚 Modal: Add Truck -->
+<div class="modal fade" id="truckFormModal" tabindex="-1" aria-labelledby="truckModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- Centered for better UX -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="truckModalLabel">Add New Project Record</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="truckForm" action="{% url 'core:create_project' %}">
+          {% csrf_token %}
+          
+          <div class="row">
+            <div class="col-md-6 col-12 mb-3">
+              <label for="{{ form.name.label }}">{{ form.name.label }}</label>
+            
+              {{ form.name }}
+
+            </div>
+            
+            <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.code.label}}">{{form.code.label}}</label>
+           
+              {{ form.code }}
+
+            </div>
+          </div>
+          <div class="col-12 mb-3">
+              <label for="{{form.description.label}}">{{form.description.label}}</label>
+              {{ form.description }}
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-12 mb-3">
+              <label for="{{ form.start_date.label }}">{{ form.start_date.label }}</label>
+            
+              {{ form.start_date }}
+
+            </div>
+            
+            <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.end_date.label}}">{{form.end_date.label}}</label>
+           
+              {{ form.end_date }}
+
+            </div>
+
+            <h3> Project Address </h3>
+            <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.region.label}}">{{form.region.label}}</label>
+           
+              {{ form.region }}
+
+            </div>
+             <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.zone.label}}">{{form.zone.label}}</label>
+           
+              {{ form.zone }}
+
+            </div>
+             <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.woreda.label}}">{{form.woreda.label}}</label>
+           
+              {{ form.woreda }}
+
+            </div>
+
+             <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.kebele.label}}">{{form.kebele.label}}</label>
+           
+              {{ form.kebele }}
+
+            </div>
+
+             <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.town.label}}">{{form.town.label}}</label>
+           
+              {{ form.town }}
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.latitute.label}}">{{form.latitude.label}}</label>
+              {{form.latitude}}
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+              <label for="{{form.longitude.label}}">{{form.longitude.label}}</label>
+              {{form.longitude}}
+            </div>
+          </div>
+          {% comment %} <div class="row">
+            {% for field in form %}
+              <div class="col-md-6 col-12 mb-3">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+
+          </div> {% endcomment %}
+          <div class="mt-3">
+            <button type="cancel" class="btn btn-primary" >Clear</button>
+            <button type="submit" class="btn btn-success">Save Record</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 📥 Modal: Import from Excel -->
+<div class="modal fade" id="truckImportModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">Import Trucks from Excel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" id="importForm">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="excelFile" class="form-label">Upload Excel File</label>
+            <input type="file" class="form-control" id="excelFile" name="excel_file" accept=".xlsx, .xls">
+          </div>
+          <button type="submit" class="btn btn-success">Import</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- ✅ Bootstrap JS Bundle (Required for modals) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ Chart.js for the chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('truckProductivityChart').getContext('2d');
+  const truckProductivityChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['January', 'February', 'March', 'April', 'May'],
+      datasets: [{
+        label: 'Productivity',
+        data: [80, 85, 90, 95, 100],
+        borderColor: 'rgba(13, 110, 253, 1)',
+        backgroundColor: 'rgba(13, 110, 253, 0.2)',
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

@@ -1,7 +1,7 @@
 # particular/forms.py
 
 from django import forms
-from .models import Particular, DivisionModel, ProjectType
+from .models import Particular, DivisionModel, ProjectType, WorkEquipment
 
 class ParticularForm(forms.ModelForm):
     """
@@ -36,4 +36,20 @@ class ParticularForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Particular Name'}),
             'data_collection_days': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
             'collected_days': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+        }
+
+
+class WorkEquipmentForm(forms.ModelForm):
+    """
+    A ModelForm for the Work Equipment model, used to create and update Particular instances.
+    It automatically generates form fields based on the Particular model's fields.
+    """
+    class Meta:
+        model = WorkEquipment
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'unit': forms.TextInput(attrs={'class': 'form-control'}),
+            'count': forms.TextInput(attrs={'class': 'form-control'}),
         }
