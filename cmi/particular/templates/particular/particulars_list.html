@@ -65,10 +65,12 @@
     {% else %}
         <p class="text-center text-gray-600 text-lg">No particulars found. How about <a href="{% url 'particular:create_particular' %}" class="text-blue-500 hover:underline">creating one</a>?</p>
     {% endif %}
+
+
+   
 </div>
 
 
-{% include 'core/notifications.html' %}
 
 
 <!-- Modal Component -->
@@ -135,6 +137,17 @@
 <!-- Add Tailwind CSS via CDN for styling -->
 <script src="https://cdn.tailwindcss.com"></script>
 
+{% comment %} 
+<!-- this gives same functionality for calling openModal() funciton -->
+{% if open_modal %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        openModal();
+    });
+</script>
+{%endif%} 
+{% endcomment %}
+
 <script>
     function openModal() {
         document.getElementById('importModal').classList.remove('hidden');
@@ -142,6 +155,10 @@
     function closeModal() {
         document.getElementById('importModal').classList.add('hidden');
     }
+
+    {% if open_modal %}
+    openModal();
+    {% endif %}
 
 </script>
 {% endblock %}

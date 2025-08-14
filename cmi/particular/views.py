@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ParticularForm, WorkEquipmentForm
 from .models import Particular, DivisionModel, ProjectType # Make sure to import your models
-from .services import parse_csv_file
+from .services import GridDataParser
 
 from io import TextIOWrapper
 import csv
@@ -60,27 +60,48 @@ def import_from_file(request):
     if request.method == "POST":
         uploaded_file = request.FILES.get("csv_file")
 
+
         if not uploaded_file:
+            messages.error(request, 'failed to import file')
+
             # No file uploaded
             return render(request, 'particulars/particular_list.html', {'error': 'Please select a file to upload. '})
         
         # Ensure it's a CSV file
         if not (uploaded_file.name.endswith('.csv') or uploaded_file.name.endswith('.xlsx') or uploaded_file.name.endswith('.xls')):
+            messages.error(request, 'failed to import file')
+
             return render(request, 'particular/particulars_list.html', {'error': 'Invalid file type. Please upload a CSV file.'})
+        
         
         try:
             # Read CSV file
-            file_data = TextIOWrapper(uploaded_file.file, encoding='utf-8')
+            # file_data = TextIOWrapper(uploaded_file.file, encoding='utf-8')
             
             # parse csv data and add into database
-            parse_csv_file(file_data)
+            filename = uploaded_file.name  # e.g., "data.xlsx" or "data.csv"
+            extension = filename.split('.')[-1].lower()
 
-            messages.success(request, "CSV file imported successfully.")
+            # if extension in ('csv',):
+            #     file_format = 'csv'
+            # elif extension in ('xlsx', 'xls'):
+            #     file_format = 'xlsx'
+            # else:
+            #     raise ValueError("Unsupported file type")
+            
+
+            parser = GridDataParser(uploaded_file, extension)
+            parser.parse()
+
+            # parse_csv_file(uploaded_file)
+
+            messages.success(request, "File imported successfully.")
             
             return redirect('particular:particulars')
 
         except Exception as e:
-            return render(request, 'particular/particulars_list.html', {'error': f"Error reading file: {str(e)}"})
+            messages.error(request, f"Failed to upload the file: {e}")
+            return render(request, 'particular/particulars_list.html', {'error': f"Error reading file: {str(e)}", 'open_modal':True})
 
 
     return redirect('particular:particulars')
