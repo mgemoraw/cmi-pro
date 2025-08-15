@@ -11,9 +11,21 @@
         <a href="{% url 'particular:create_particular' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105">
             + Add New Particular
         </a>
+
+       
+        {% comment %} 
         <a href="{% url 'particular:create_equipment' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105">
-            + Import from CSV
-        </a>
+            + Add Equipment
+        </a>  
+        {% endcomment %}
+
+        <button 
+            onClick="openSectorModal()"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+            Add Sector 
+        </button>
+
         <button 
             onClick="openModal()"
             class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -67,11 +79,91 @@
     {% endif %}
 
 
+    {% if sectors %}
+    <h1> Project Sectors </h1>
+    <div class="overflow-x-auto bg-white shadow-md rounded-xl border border-gray-200">
+        <table class="min-w-full text-sm text-gray-700">
+            <!-- Table Header -->
+            <thead>
+                <tr class="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 uppercase text-xs font-semibold tracking-wider">
+                    <th class="py-2 px-6 text-left">No</th>
+                    <th class="py-2 px-6 text-left">Name</th>
+                </tr>
+            </thead>
+
+            <!-- Table Body -->
+            <tbody class="divide-y divide-gray-200">
+                {% for sector in sectors %}
+                <tr class="hover:bg-blue-50 transition duration-150">
+                    <td class="py-2 px-6 text-left font-medium text-gray-800">{{ sector.id }}</td>
+                    <td class="py-2 px-6 text-left">{{ sector.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <p class="text-center text-gray-500 text-lg mt-6">
+        No Project Sectors found.
+        How about 
+        <a href="{% url 'particular:create_project' %}" class="text-blue-600 hover:underline font-medium">
+            creating one
+        </a>?
+    </p>
+    {% endif %}
+
+
    
 </div>
 
 
+<!-- Modal for Project sector (Dam, water supply, irrigation)-->
+ <div id="sectorModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+    <!--Modal Box -->
+   <div class="bg-white rounded-lg shadow-lg w-1/3 p-6 relative">
+        <!-- Close Button -->
+        <button onClick="closeSectorModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+            ✖
+        </button>
+        
+        <form method="POST" 
+            action="{% url 'particular:create_project' %}" 
+            class="space-y-6">
+            <!-- Modal Title -->
+            <h2 class="text-xl font-bold text-gray-800">
+                Add New Sector
+            </h2>
 
+            {% csrf_token %}
+
+            <!-- File Upload -->
+            <div>
+                <label for="csv_file" class="block text-sm font-medium text-gray-700 mb-2">
+                    Name of Sector
+                </label>
+                <input type="text" 
+                    name="name" 
+                    id="name" 
+                    class="p-2 border w-full ">
+                
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end space-x-3">
+                <button type="button" 
+                        onclick="closeSectorModal()" 
+                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+ </div>
 
 <!-- Modal Component -->
 <div 
@@ -159,6 +251,13 @@
     {% if open_modal %}
     openModal();
     {% endif %}
+
+     function openSectorModal() {
+        document.getElementById('sectorModal').classList.remove('hidden');
+    }
+    function closeSectorModal() {
+        document.getElementById('sectorModal').classList.add('hidden');
+    }
 
 </script>
 {% endblock %}

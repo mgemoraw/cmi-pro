@@ -1,15 +1,66 @@
 {% extends 'base.html' %}
 
-{% block content%}
-<div>
-    <form method="POST" action="{% url 'particular:create_equipment' %}">
-        {% csrf_token %}
-        {{form.as_p}}
+{% block content %}
+<div id="equipmentModal"
+     class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
+    
+    <!-- Modal Box -->
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8 relative animate-fadeIn">
+        
+        <!-- Close Button -->
+        <button onClick="closeEquipmentModal()" 
+                class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition">
+            ✖
+        </button>
 
-        <div class="row">
-            <button type='submit'>Create Equipment </button>
-        </div>
-    </form>
+        <!-- Modal Title -->
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+            Add New work Equipment
+        </h2>
+
+        <!-- Form -->
+        <form method="POST" 
+              action="{% url 'particular:create_equipment' %}"  
+              enctype="multipart/form-data" 
+              class="space-y-4">
+            {% csrf_token %}
+            
+            <!-- Django form fields -->
+            <div class="space-y-2">
+                {{ equipment_form.as_p }}
+            </div>
+
+      
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit"
+                        class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+                    Create Equipment
+                </button>
+            </div>
+
+            <!-- Error Message -->
+            {% if error %}
+            <div class="mt-2">
+                <p class="text-red-500 text-sm font-medium">
+                    {{ error }}
+                </p>
+            </div>
+            {% endif %}
+        </form>
+    </div>
 </div>
 
+<script>
+    function openEquipmentModal() {
+        document.getElementById('equipmentModal').classList.remove('hidden');
+    }
+    function closeEquipmentModal() {
+        document.getElementById('equipmentModal').classList.add('hidden');
+    }
+
+    {% if open_modal %}
+    openEquipmentModal();
+    {% endif %}
+</script>
 {% endblock %}

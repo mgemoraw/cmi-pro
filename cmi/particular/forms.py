@@ -1,7 +1,7 @@
 # particular/forms.py
 
 from django import forms
-from .models import Particular, DivisionModel, ProjectType, WorkEquipment
+from .models import Particular, Division, ProjectType, WorkEquipment
 
 class ParticularForm(forms.ModelForm):
     """
@@ -18,8 +18,8 @@ class ParticularForm(forms.ModelForm):
         # be handled by default values or in the view.
         fields = [
             'pid',
-            'division',
             'project_type',
+            'division',
             'task',
             'element',
             'name',
@@ -29,8 +29,9 @@ class ParticularForm(forms.ModelForm):
         # Optional: Add widgets for custom form input types or attributes
         widgets = {
             'pid': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unique Particular ID'}),
-            'division': forms.Select(attrs={'class': 'form-control'}),
             'project_type': forms.Select(attrs={'class': 'form-control'}),
+            'division': forms.Select(attrs={'class': 'form-control'}),
+
             'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task description'}),
             'element': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Element description'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Particular Name'}),
@@ -53,3 +54,4 @@ class WorkEquipmentForm(forms.ModelForm):
             'unit': forms.TextInput(attrs={'class': 'form-control'}),
             'count': forms.TextInput(attrs={'class': 'form-control'}),
         }
+

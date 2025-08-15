@@ -2,29 +2,42 @@ from django.db import models
 
 # Create your models here.
 
-class DivisionModel(models.Model):
+class Sector(models.Model):
+    name: str = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return self.name
+    
+
+class ProjectType(models.Model):
+    name: str = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Division(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10)
 
     # particulars = models.ForeignKey('Particular', on_delete=models.CASCADE)
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            self.code = f'Division-{self.pk}'
+        
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Division {self.code} - {self.name}"
     
 
-class ProjectType(models.Model):
-    name: str = models.CharField(max_length=250)
 
-    def __str__(self):
-        return self.name
-    
 class WorkEquipment(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     unit = models.CharField(max_length=50, null=True)
     count = models.PositiveIntegerField(default=0)
-
-
 
     def save(self, *args, **kwargs):
         if self.pk is None: # only when creating a new equipment
@@ -60,8 +73,8 @@ class TaskEquipment(models.Model):
 
 class Particular(models.Model):
     pid = models.CharField(max_length=10, unique=True)
-    division = models.ForeignKey('DivisionModel', on_delete=models.CASCADE)
     project_type = models.ForeignKey('ProjectType', on_delete=models.CASCADE)
+    division = models.ForeignKey('Division', on_delete=models.CASCADE)
 
     task = models.CharField(max_length=255)
     element = models.CharField(max_length=255)
@@ -79,4 +92,4 @@ class Particular(models.Model):
         super().save()
 
     def __str__(self):
-        return f"{self.pid}-{self.element} {self.name}"
+        return f"{self.pid}-{self.task} {self.element} {self.name}"

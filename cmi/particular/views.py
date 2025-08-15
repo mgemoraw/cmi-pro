@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import ParticularForm, WorkEquipmentForm
-from .models import Particular, DivisionModel, ProjectType # Make sure to import your models
+from .models import Particular, Division, ProjectType # Make sure to import your models
 from .services import GridDataParser
 
 from io import TextIOWrapper
@@ -11,21 +11,51 @@ import csv
 # Create your views here.
 def index(request):
     particulars = Particular.objects.all()
-    context = {'particulars': particulars}
+    sectors = ProjectType.objects.all()
+    divisions = Division.objects.all()
+    particular_form = ParticularForm()
+    
+    context = {
+        'particulars': particulars, 
+        'sectors': sectors, 
+        'divisions': divisions,
+        'particular_form': particular_form,
+        
+    }
 
-    return render(request, 'particular/particulars_list.html', context=context)
+
+    return render(request, 'particular/index.html', context=context)
 
 def particulars_view(request):
     particulars = Particular.objects.all()
+    sectors = ProjectType.objects.all()
+    divisions = Division.objects.all()
 
-    return render(request, 'particular/particulars_list.html',{'particulars': particulars})
+    context = {'particulars': particulars, 'sectors': sectors, 'divisions': divisions}
 
+    return render(request, 'particular/particulars_list.html', context)
 
+def create_project_sector(request):
+    if request.method == "POST":
+        try:
+            name = request.POST.get("name")
+
+            project = ProjectType.objects.create(
+                name=name,
+            )
+            messages.success(request, "Sector added!")
+            # Redirect to a list page or a detail page of the newly created particular
+            # You'll need to define 'particular_list' or 'particular_detail' URL patterns
+            return redirect('particular:particulars') # Assuming
+        except Exception as e:
+            messages.error(request, f"Adding Sector Failed with error: {e}")
+
+    return redirect('particular:particulars')
 
 def create_equipment(request):
     form = WorkEquipmentForm(request.POST)
 
-    return render(request, 'particular/equipments.html', {'form': form})
+    return render(request, 'particular/equipments.html', {'equipment_form': form})
 
 def create_particular(request):
     """
@@ -46,14 +76,20 @@ def create_particular(request):
     else:
         # Create a new empty form
         form = ParticularForm()
+        equipment_form = WorkEquipmentForm()
 
     # Render the form template with the form instance
-    return render(request, 'particular/create_particular.html', {'form': form})
+    return render(request, 'particular/create_particular.html', {'form': form, 'equipment_form': equipment_form})
 
 # Example of a simple list view to redirect to after creation (optional, for testing)
 def particular_list(request):
     particulars = Particular.objects.all()
-    return render(request, 'particular/particulars_list.html', {'particulars': particulars})
+    sectors = ProjectType.objects.all()
+    divisions = Division.objects.all()
+
+    context = {'particulars': particulars, 'sectors': sectors, 'divisions': divisions}
+
+    return render(request, 'particular/particulars_list.html', context)
 
 
 def import_from_file(request):
