@@ -1,21 +1,29 @@
 # particular/forms.py
 
 from django import forms
-from .models import Particular, Division, ProjectType, WorkEquipment
+from .models import Particular, Division, ProjectType, WorkEquipment, Sector
 
 # forms 
 class DivisionForm(forms.ModelForm):
     """
     A model form for the divisions model
     """
+    sector = forms.ModelChoiceField(
+        queryset = ProjectType.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        empty_label='-- Select Sector --',
+    )
+
     class Meta:
         model = Division
         fields = [
+            'sector',
             'name',
             'code',
         ]
 
         widgets = {
+            # 'sector': forms.Select(attrs={'class': 'form-control'}),
             'code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unique Division Code'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unique Division name'}),
         }

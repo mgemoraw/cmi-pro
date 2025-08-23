@@ -1,0 +1,30 @@
+<form action="{% url 'particular:create-division' %}" method="POST" id="division-form">
+    {% csrf_token %}
+
+    <div>
+        {{ division_form.as_p }}
+
+    <div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="submit"> Add Division </button>
+            <button class="btn btn-primary" id='division-clear' type="cancel" onclick="clearForm()"> Clear </button>
+        </div>
+
+</form>
+
+<script>
+    const divisionForm = document.createElement.getElementById('division-form');
+    const cancel_button = document.createElementById('division-clear');
+
+    // division modal
+    function openDivisionModal() {
+        new bootstrap.Modal(document.getElementById('divisionModal')).show();
+    }
+
+    //close division modal
+    function closeDivisionModal() {
+        document.getElementById('divisionModal').reset();
+        var divisionModal = bootstrap.Modal.getInstance(document.getElementById('divisionModal'));
+    }
+    
+</script>

@@ -87,10 +87,10 @@ class Particular(models.Model):
 
     equipments = models.ManyToManyField('WorkEquipment', related_name='work_equipments')
 
-    def save(self):
-        self.progress = self.collected_days / self.data_collection_days * 100
+    # def save(self):
+    #     self.progress = self.collected_days / self.data_collection_days * 100
     
-        super().save()
+    #     super().save()
 
     def __str__(self):
         return f"{self.pid}-{self.task} {self.element} {self.name}"

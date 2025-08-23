@@ -7,6 +7,34 @@
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
         <h2 class="fw-bold text-dark mb-3 mb-md-0">All Particulars</h2>
         
+        <div class="row">
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3 row">
+                    {% comment %} <label for="sectors" class="form-label fw-bold">Filter by Sectors</label> {% endcomment %}
+                    <select class="form-select" id="sectors" name="sectors">
+                        <option value="" selected disabled>-- Select a sector --</option>
+                        {% for s in sectors %}
+                        <option value={{s.id}}>{{s.name}}</option>
+                        {% endfor %}
+                        {% comment %} 
+                        <option value="All">All</option>
+                        <option value="Dam">Dam</option>
+                        <option value="Irrigation">Irrigation</option>
+                        <option value="WaterSupply">Water Supply</option> 
+                        {% endcomment %}
+                    </select>
+                </div>
+            </form>
+        </div>
+        
+
+
+
+        
+
+        
     </div>
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
@@ -43,12 +71,16 @@
         </form>
 
             <!-- Add Particular Button -->
+             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#divisionModal">
+                Add Division
+            </button>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#particularModal">
                 Add Particular
             </button>
             <button type="button" class="btn btn-primary text-white" onclick="openModal()">
                 Import from CSV/XLSX
             </button>
+            
         </div>
         
     </div>
@@ -121,11 +153,39 @@
     {% endif %}
 </div>
 
+{% comment %} Add division MOdal {% endcomment %}
+<!-- Add division Modal -->
+ <div id="divisionModal" class="modal fade" tabindex="-2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            
+            <form id="division-form" method="POST" action="{% url 'particular:create-division' %}">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Create Division</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick='closeDivisionModal' aria-label="Close"></button>
+                </div>
+                <div class="m-3">
+
+                {{division_form.as_p}}
+                </div>
+                
+            </form>
+
+            <div class="modal-footer">
+            <button class="btn btn-primary" type="submit"> Add Division </button>
+            <button class="btn btn-primary" id='division-clear' type="cancel" onclick="clearDivisionForm()"> Clear </button>
+        </div>
+        </div>
+    </div>
+</div>
+
 <!-- Import Modal -->
 <div id="importModal" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form method="POST" action="{% url 'particular:import_from_file' %}" enctype="multipart/form-data">
+            <form id="importForm" method="POST" action="{% url 'particular:import_from_file' %}" enctype="multipart/form-data" >
                 {% csrf_token %}
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold">Import Particulars from CSV/XLSX</h5>
@@ -137,19 +197,21 @@
                         <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv, .xlsx, .xls">
                     </div>
 
+
                     <div id="loadingSpinner" class="d-none text-center">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         <p class="mt-2">Importing your file...</p>
                     </div>
+
                     {% if error %}
                     <div class="alert alert-danger py-2">{{ error }}</div>
                     {% endif %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="button" id="importBtn" class="btn btn-primary">Import</button>
+                    <button type="button" id="importBtn" class="btn btn-primary" >Import</button>
                 </div>
                 </div>
             </form>
@@ -170,7 +232,7 @@
 
       <!-- Modal Body -->
       <div class="modal-body">
-        <form id="importForm" method="post" action="{% url 'particular:create_particular' %}">
+        <form id="createParticularForm" method="post" action="{% url 'particular:create_particular' %}">
           {% csrf_token %}
 
           {% if form.non_field_errors %}
@@ -208,35 +270,131 @@
 
 <!-- JavaScript -->
 <script>
+    
+    // constants
+    
+    const divisionForm = document.getElementById('division-form');
+    const cancel_button = document.getElementById('division-clear');
+    const importBtn = document.getElementById('importBtn');
+    
+    
+    const csvFile = document.getElementById('csv_file');
+    const importForm = document.getElementById('importForm');
+    // const importModal = new bootstrap.Modal(document.getElementById('importModal'));
+
+    const modalBody = importForm.querySelector('.modal-body');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+
+    
+    // division modal
+    function openDivisionModal() {
+        new bootstrap.Modal(document.getElementById('divisionModal')).show();
+    }
+
+    //close division modal
+    function closeDivisionModal() {
+        divisionForm.reset();
+        var divisionModal = bootstrap.Modal.getInstance(document.getElementById('divisionModal'));
+        divisionModal.hide();
+    }
+
+    function clearDivisionForm() {
+        closeDivisionModal();
+    }
+
     // Modal control
     function openModal() {
         new bootstrap.Modal(document.getElementById('importModal')).show();
     }
 
-    document.getElementById('importBtn').addEventListener('click', function(event) {
-        // Show the spinner and disable the button
-        document.getElementById('loadingSpinner').classList.remove('d-none');
-        document.getElementById('importBtn').disabled = true;
-        document.getElementById('importBtn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
-        
-        // Submit the form
-        document.getElementById('importForm').submit();
-    });
-
     function closeModal() {
+        var importModal = bootstrap.Modal.getInstance(document.getElementById('importModal'));
+        var spinner = document.getElementById('loadingSpinner');
+        var importBtn = document.getElementById('importBtn');
+
+        // importModal.hide();
+        // clear any previsous error messages on closing the modal
         // Reset the form and the button state when the modal is closed
         document.getElementById('importForm').reset();
-        document.getElementById('loadingSpinner').classList.add('d-none');
-        document.getElementById('importBtn').disabled = false;
-        document.getElementById('importBtn').innerHTML = 'Import';
+
+        spinner.classList.add('d-none');
+        importBtn.disabled = false;
+        importBtn.innerHTML = 'Import';
         
         // Hide the modal
-        var myModal = bootstrap.Modal.getInstance(document.getElementById('importModal'));
-        myModal.hide();
-        if (myModal) {
-            myModal.hide();
+        // importModal.hide();
+        if (importModal) {
+            importModal.hide();
         }
     }
+   
+
+    function importFile() {
+        const csvFile = document.getElementById('csv_file');
+        let importForm = document.getElementById('importForm');
+        let loadingSpinner = document.getElementById('loadingSpinner');
+
+        const modalBody = importForm.querySelector('.modal-body');
+        // Check if a file has been selected
+        if (csvFile.files.length === 0) {
+            // Display an error message if no file is selected
+            if (!modalBody.querySelector('.alert-danger')) {
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-danger py-2';
+                errorAlert.textContent = 'Please select a file to import.';
+                modalBody.insertBefore(errorAlert, loadingSpinner);
+            }
+
+            return;
+        }
+
+            
+        // show spinner
+        loadingSpinner.classList.remove('d-none');
+
+        // Disable button
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+        setTimeout(() => {
+            document.getElementById('importForm').submit();
+        }, 50);
+    }
+
+    document.getElementById('importBtn').addEventListener('click', function() {
+        const btn = this;
+        const csvFile = document.getElementById('csv_file');
+        let importForm = document.getElementById('importForm');
+        let loadingSpinner = document.getElementById('loadingSpinner');
+        const modalBody = importForm.querySelector('.modal-body');
+
+        // Check if a file has been selected
+        if (csvFile.files.length === 0) {
+            // Display an error message if no file is selected
+            if (!modalBody.querySelector('.alert-danger')) {
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-danger py-2';
+                errorAlert.textContent = 'Please select a file to import.';
+                modalBody.insertBefore(errorAlert, loadingSpinner);
+            }
+
+            return;
+        }
+        
+        // show spinner
+        loadingSpinner.classList.remove('d-none');
+
+        // Disable button
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+        setTimeout(() => {
+            document.getElementById('importForm').submit();
+        }, 50);
+    });
+
+
    
     //function closeModal() {
     //    let modalEl = document.getElementById('importModal');
@@ -267,7 +425,7 @@
         const totalRows = rows.length;
         const totalPages = Math.ceil(totalRows / rowsPerPage);
         const paginationEl = document.getElementById('pagination');
-        paginationEl.innerHTML = '';
+        // paginationEl.innerHTML = '';
 
         // Hide rows not in current page
         rows.forEach((row, index) => {
@@ -288,7 +446,7 @@
         }
     }
 
-    paginateTable();
+    // paginateTable();
 </script>
 
 {% endblock %}

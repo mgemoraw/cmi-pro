@@ -60,6 +60,14 @@ def create_equipment(request):
 
     return render(request, 'particular/equipments.html', {'equipment_form': form})
 
+def create_division(request):
+    form = DivisionForm(request.POST)
+    if form.is_valid():
+        form.save()
+        
+    return redirect('particular:particulars')
+
+
 def create_particular(request):
     """
     Handles the creation of a new Particular instance.
@@ -101,12 +109,11 @@ def import_from_file(request):
     if request.method == "POST":
         uploaded_file = request.FILES.get("csv_file")
 
-
         if not uploaded_file:
             messages.error(request, 'failed to import file')
 
             # No file uploaded
-            return render(request, 'particulars/particular_list.html', {'error': 'Please select a file to upload. '})
+            return render(request, 'particular/particulars_list.html', {'error': 'Please select a file to upload. '})
         
         # Ensure it's a CSV file
         if not (uploaded_file.name.endswith('.csv') or uploaded_file.name.endswith('.xlsx') or uploaded_file.name.endswith('.xls')):
