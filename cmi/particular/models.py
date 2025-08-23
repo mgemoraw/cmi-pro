@@ -17,6 +17,7 @@ class ProjectType(models.Model):
 
 
 class Division(models.Model):
+    sector = models.ForeignKey('Sector', on_delete=models.SET_NULL, related_name='sector', null=True)
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10)
 
@@ -72,16 +73,16 @@ class TaskEquipment(models.Model):
     
 
 class Particular(models.Model):
-    pid = models.CharField(max_length=10, unique=True)
-    project_type = models.ForeignKey('ProjectType', on_delete=models.CASCADE)
-    division = models.ForeignKey('Division', on_delete=models.CASCADE)
+    pid = models.CharField(max_length=10, primary_key=True, unique=True)
+    project_type = models.ForeignKey('ProjectType', on_delete=models.PROTECT)
+    division = models.ForeignKey('Division', on_delete=models.PROTECT, related_name='particular_division')
 
     task = models.CharField(max_length=255)
     element = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
 
-    data_collection_days = models.IntegerField(default=80)
-    collected_days = models.IntegerField(default=0)
+    required_instances = models.IntegerField(default=80)
+    collected_instances = models.IntegerField(default=0)
     progress = models.FloatField(default=0.0)
 
     equipments = models.ManyToManyField('WorkEquipment', related_name='work_equipments')

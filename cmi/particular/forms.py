@@ -3,6 +3,23 @@
 from django import forms
 from .models import Particular, Division, ProjectType, WorkEquipment
 
+# forms 
+class DivisionForm(forms.ModelForm):
+    """
+    A model form for the divisions model
+    """
+    class Meta:
+        model = Division
+        fields = [
+            'name',
+            'code',
+        ]
+
+        widgets = {
+            'code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unique Division Code'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Unique Division name'}),
+        }
+
 class ParticularForm(forms.ModelForm):
     """
     A ModelForm for the Particular model, used to create and update Particular instances.
@@ -23,8 +40,8 @@ class ParticularForm(forms.ModelForm):
             'task',
             'element',
             'name',
-            'data_collection_days', # Include if you want this editable on creation
-            'collected_days'        # Include if you want this editable on creation
+            'required_instances', # Include if you want this editable on creation
+            'collected_instances',       # Include if you want this editable on creation
         ]
         # Optional: Add widgets for custom form input types or attributes
         widgets = {
@@ -35,8 +52,8 @@ class ParticularForm(forms.ModelForm):
             'task': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Task description'}),
             'element': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Element description'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Particular Name'}),
-            'data_collection_days': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
-            'collected_days': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
+            'required_instances': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
+            'collected_instances': forms.NumberInput(attrs={'class': 'form-control', 'min': '0'}),
         }
 
 

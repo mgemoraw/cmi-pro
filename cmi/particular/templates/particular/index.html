@@ -136,13 +136,21 @@
                         <label for="csv_file" class="form-label">Select File</label>
                         <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv, .xlsx, .xls">
                     </div>
+
+                    <div id="loadingSpinner" class="d-none text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Importing your file...</p>
+                    </div>
                     {% if error %}
                     <div class="alert alert-danger py-2">{{ error }}</div>
                     {% endif %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Import</button>
+                    <button type="button" id="importBtn" class="btn btn-primary">Import</button>
+                </div>
                 </div>
             </form>
         </div>
@@ -162,7 +170,7 @@
 
       <!-- Modal Body -->
       <div class="modal-body">
-        <form method="post" action="{% url 'particular:create_particular' %}">
+        <form id="importForm" method="post" action="{% url 'particular:create_particular' %}">
           {% csrf_token %}
 
           {% if form.non_field_errors %}
@@ -204,11 +212,37 @@
     function openModal() {
         new bootstrap.Modal(document.getElementById('importModal')).show();
     }
+
+    document.getElementById('importBtn').addEventListener('click', function(event) {
+        // Show the spinner and disable the button
+        document.getElementById('loadingSpinner').classList.remove('d-none');
+        document.getElementById('importBtn').disabled = true;
+        document.getElementById('importBtn').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+        
+        // Submit the form
+        document.getElementById('importForm').submit();
+    });
+
     function closeModal() {
-        let modalEl = document.getElementById('importModal');
-        let modal = bootstrap.Modal.getInstance(modalEl);
-        modal.hide();
+        // Reset the form and the button state when the modal is closed
+        document.getElementById('importForm').reset();
+        document.getElementById('loadingSpinner').classList.add('d-none');
+        document.getElementById('importBtn').disabled = false;
+        document.getElementById('importBtn').innerHTML = 'Import';
+        
+        // Hide the modal
+        var myModal = bootstrap.Modal.getInstance(document.getElementById('importModal'));
+        myModal.hide();
+        if (myModal) {
+            myModal.hide();
+        }
     }
+   
+    //function closeModal() {
+    //    let modalEl = document.getElementById('importModal');
+    //    let modal = bootstrap.Modal.getInstance(modalEl);
+    //    modal.hide();
+    // }
     {% if open_modal %}
     openModal();
     {% endif %}

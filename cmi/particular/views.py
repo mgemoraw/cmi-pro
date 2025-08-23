@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import ParticularForm, WorkEquipmentForm
+from .forms import ParticularForm, WorkEquipmentForm, DivisionForm
 from .models import Particular, Division, ProjectType # Make sure to import your models
 from .services import GridDataParser
 
@@ -14,12 +14,15 @@ def index(request):
     sectors = ProjectType.objects.all()
     divisions = Division.objects.all()
     particular_form = ParticularForm()
-    
+    equipment_form = WorkEquipmentForm(request.POST)
+    division_form = DivisionForm()
     context = {
         'particulars': particulars, 
         'sectors': sectors, 
         'divisions': divisions,
         'particular_form': particular_form,
+        'equipment_form': equipment_form,
+        'division_form': division_form,
         
     }
 
@@ -77,9 +80,11 @@ def create_particular(request):
         # Create a new empty form
         form = ParticularForm()
         equipment_form = WorkEquipmentForm()
+        # Render the form template with the form instance
+        return render(request, 'particular/create_particular.html', {'form': form, 'equipment_form': equipment_form})
+    messages.success(request, "Information about request")
+    return redirect('particular:particulars')
 
-    # Render the form template with the form instance
-    return render(request, 'particular/create_particular.html', {'form': form, 'equipment_form': equipment_form})
 
 # Example of a simple list view to redirect to after creation (optional, for testing)
 def particular_list(request):
