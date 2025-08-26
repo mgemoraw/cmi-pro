@@ -41,14 +41,20 @@
                         <a class="nav-link {% if request.path == '/bit/projects/' %} active {% endif %}" href="{% url 'core:projects' %}"><i class="fas fa-fill me-2"></i> Projects</a>
                         <a class="nav-link {% if request.path == '/bit/particulars/' %} active {% endif %}" href="{% url 'core:particulars' %}"><i class="fas fa-activity me-2"></i> Particulars</a>
                         <a class="nav-link {% if request.path == '/bit/instances/' %} active {% endif %}" href="{% url 'core:instances' %}"><i class="fas fa-activity me-2"></i> Instances</a>
+                        <a class="nav-link" href="{% url 'core:work-items' %}"><i class="fas fa-tasks me-2"></i> Work Items</a>
+
                         <a class="nav-link {% if request.path == '/bit/truck/' %} active {% endif %}" href="{% url 'core:truck' %}"><i class="fas fa-truck me-2"></i> Truck</a>
-                        <a class="nav-link " href="#"><i class="fas fa-dumpster me-2"></i> Excavator</a>
-                        <a class="nav-link" href="#"><i class="fas fa-buildozer me-2"></i> Dozer</a>
-                        <a class="nav-link" href="#"><i class="fas fa-users me-2"></i> Labor</a>
-                        <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i> Work Items</a>
-                        <a class="nav-link" href="#"><i class="fas fa-industry me-2"></i> Work Sampling</a>
-                        <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Settings</a>
-                        <a class="nav-link" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                        <a class="nav-link {% if request.path == '/bit/excavator/' %} active {% endif %}" href="{% url 'core:excavator' %}"><i class="fas fa-dumpster me-2"></i> Excavator</a>
+                        <a class="nav-link {% if request.path == '/bit/dozer/' %} active {% endif %}" href="{% url 'core:dozer' %}"><i class="fas fa-buildozer me-2"></i> Dozer</a>
+                        <a class="nav-link {% if request.path == '/bit/labor/' %} active {% endif %}" href="{% url 'core:labor' %}"><i class="fas fa-users me-2"></i> Labor</a>
+                        <a class="nav-link {% if request.path == '/bit/work-sampling/' %} active {% endif %}" href="{% url 'core:work-sampling' %}"><i class="fas fa-industry me-2"></i> Work Sampling</a>
+                        <a class="nav-link {% if request.path == '/bit/settings/' %} active {% endif %}" href="{% url 'core:settings' %}"><i class="fas fa-cogs me-2"></i> Settings</a>
+
+                        {% if user.is_authenticated %}
+                        <a class="nav-link {% if request.path == '/bit/user-logout/' %} active {% endif %}" href="{% url 'core:user-logout' %}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                        {% else %}
+                        <a class="nav-link {% if request.path == '/bit/user-login/' %} active {% endif %}" href="{% url 'core:user-login' %}"><i class="fas fa-sign-out-alt me-2"></i> Login </a>
+                        {% endif %}
                     </div>
                 </nav>
                 <!-- Main content -->

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 from .forms import TipperDataModelForm, ProjectForm, DataInstanceForm
 from particular.forms import ParticularForm
@@ -31,7 +33,7 @@ def login_view(request):
 
 def user_logout(request):
     logout(request)
-    return redirect("login")
+    return redirect("core:user-login")
 
 def dashboard(request):
     return render(request, 'core/dashboard.html', {})
@@ -113,4 +115,59 @@ def truck_create(request):
 
         return redirect('core:truck', )  # or render with success msg
 
+@login_required
+def settings(request):
+    context = {}
+    return render(request, 'core/settings.html', context)
 
+@login_required
+def work_items(request):
+    return redirect('core:particulars')
+
+
+def dozers(request):
+
+    context = {}
+    return render(request, 'core/dozers.html', context)
+
+
+def create_dozer(request):
+
+    context = {}
+    return render(request, 'core/dozers.html', context)
+
+
+def excavators(request):
+
+    context = {}
+    return render(request, 'core/excavators.html', context)
+
+
+def create_excavator(request):
+
+    context = {}
+    return render(request, 'core/excvators.html', context)
+
+
+def labors(request):
+
+    context = {}
+    return render(request, 'core/labors.html', context)
+
+
+def create_labor(request):
+
+    context = {}
+    return render(request, 'core/labors.html', context)
+
+
+def work_sampling(request):
+
+    context = {}
+    return render(request, 'core/work_sampling.html', context)
+
+
+def create_ws(request):
+
+    context = {}
+    return render(request, 'core/work_sampling.html', context)
