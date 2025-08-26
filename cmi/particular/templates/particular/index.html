@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="container py-4">
+<div class="container py-2">
     <!-- Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
         <h2 class="fw-bold text-dark mb-3 mb-md-0">All Particulars</h2>
@@ -28,13 +28,7 @@
                 </div>
             </form>
         </div>
-        
-
-
-
-        
-
-        
+ 
     </div>
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
@@ -63,7 +57,7 @@
                     <option value="">All Divisions</option>
                     {% for d in divisions %}
                         <option value="{{ d.id }}" {% if request.GET.division == d.id|stringformat:'s' %}selected{% endif %}>
-                            {{ d.name }}
+                         Division {{ d.code }}-{{ d.name }}
                         </option>
                     {% endfor %}
                 </select>
@@ -90,8 +84,8 @@
     {% if particulars %}
     <!-- Search -->
     <div class="input-group mb-3 shadow-sm">
-        <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
         <input type="text" id="tableSearch" class="form-control" placeholder="Search particulars...">
+        <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
     </div>
 
     <!-- Table -->
@@ -100,13 +94,13 @@
             <thead class="table-light">
                 <tr>
                     <th>PID</th>
-                    <th>Name</th>
-                    <th>Division</th>
                     <th>Project Type</th>
+                    <th>Division</th>
                     <th>Task</th>
                     <th>Element</th>
-                    <th class="text-center">Data Collection Days</th>
-                    <th class="text-center">Collected Days</th>
+                    <th>Particular</th>
+                    <th class="text-center">Required Instances</th>
+                    <th class="text-center">Collected Instances</th>
                     <th class="text-center">Progress (%)</th>
                 </tr>
             </thead>
@@ -114,13 +108,13 @@
                 {% for particular in particulars %}
                 <tr>
                     <td>{{ particular.pid }}</td>
-                    <td>{{ particular.name }}</td>
-                    <td>{{ particular.division.name }}</td>
                     <td>{{ particular.project_type.name }}</td>
+                    <td>{{ particular.division.name }}</td>
                     <td>{{ particular.task }}</td>
                     <td>{{ particular.element }}</td>
-                    <td class="text-center">{{ particular.data_collection_days }}</td>
-                    <td class="text-center">{{ particular.collected_days }}</td>
+                    <td>{{ particular.name }}</td>
+                    <td class="text-center">{{ particular.required_instances }}</td>
+                    <td class="text-center">{{ particular.collected_instances }}</td>
                     <td class="text-center">
                         <div class="progress" style="height: 6px;">
                             <div 

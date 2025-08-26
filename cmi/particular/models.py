@@ -17,17 +17,17 @@ class ProjectType(models.Model):
 
 
 class Division(models.Model):
-    sector = models.ForeignKey('Sector', on_delete=models.SET_NULL, related_name='sector', null=True)
+    project_type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, related_name='subsector', null=True)
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10)
 
     # particulars = models.ForeignKey('Particular', on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs):
-        if self.pk:
-            self.code = f'Division-{self.pk}'
+    # def save(self, *args, **kwargs):
+    #     if self.pk:
+    #         self.code = f'Division-{self.code}'
         
-        super().save(*args, **kwargs)
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Division {self.code} - {self.name}"

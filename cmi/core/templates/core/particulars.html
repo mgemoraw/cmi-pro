@@ -40,7 +40,7 @@
   <div class="row mb-4">
     <div class="col-md-12 ">
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckFormModal">
-        Add New Project
+        Add New Particular
       </button>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckImportModal">
         Import from File
@@ -54,28 +54,36 @@
     </div>
   </div>
 
-  <!-- Truck Details Table -->
+
+  <!--  Particulars Table -->
   <div class="row mb-4">
     <div class="col-md-12">
       <div class="card shadow-sm p-3 mb-3">
-        <h5 class="card-title">Project Details</h5>
+        <h5 class="card-title">Particulars Details</h5>
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Project ID</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Collectors</th>
+              <th>PID</th>
+              <th>Project</th>
+              <th>Division</th>
+              <th>Task</th>
+              <th>Element</th>
+              <th>Particular</th>
+              <th>Progress</th>
             </tr>
           </thead>
           <tbody>
 
-            {% for project in projects %}
+            {% for p in particulars %}
             <tr>
-              <td>{{project.code}}</td>
-              <td>{{project.name}}</td>
-              <td>{{project.zone}}</td>
-              <td>{{project.woreda}}</td>
+              <td>{{p.pid}}</td>
+              <td>{{p.project_type}}</td>
+              <td>{{p.division}}</td>
+              <td>{{p.task}}</td>
+              <td>{{p.element}}</td>
+              <td>{{p.name}}</td>
+              <td>{{p.progress}}%</td>
+
             </tr>
             {% endfor %}
             
@@ -84,6 +92,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Productivity Chart -->
   <div class="row">
@@ -99,12 +108,12 @@
 
 </main>
 
-<!-- 🚚 Modal: Add Truck -->
+<!-- 🚚 Modal: Particular Record -->
 <div class="modal fade" id="truckFormModal" tabindex="-1" aria-labelledby="truckModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- Centered for better UX -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="truckModalLabel">Add New Project Record</h5>
+        <h5 class="modal-title" id="truckModalLabel">Add New Particular Record</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -113,9 +122,9 @@
           
           <div class="row">
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{ form.name.label }}">{{ form.name.label }}</label>
+              <label for="{{ form.project.label }}">{{ form.project.label }}</label>
             
-              {{ form.name }}
+              {{ form.project }}
 
             </div>
             

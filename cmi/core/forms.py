@@ -1,5 +1,5 @@
 from django import forms
-from .models import TipperDataModel, Project, Task, Tipper, CollectorModel, TipperCycle
+from .models import TipperDataModel, Project, DataInstance, Task, Tipper, Collector, TipperCycle
 
 class TipperDataModelForm(forms.ModelForm):
     class Meta:
@@ -86,3 +86,9 @@ class ProjectForm(forms.ModelForm):
     #         else:
     #             field.widget.attrs['class'] = 'form-control'
 
+
+class DataInstanceForm(forms.ModelForm):
+    class Meta:
+        model = DataInstance
+        fields = "__all__"
+        

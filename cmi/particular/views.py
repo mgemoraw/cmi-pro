@@ -16,6 +16,25 @@ def index(request):
     particular_form = ParticularForm()
     equipment_form = WorkEquipmentForm(request.POST)
     division_form = DivisionForm()
+    error = ""
+    try:
+        # filter particulars
+        selected_division_id = request.GET.get('division', 'all')
+        selected_sector_id = request.GET.get('sector', 'all')
+
+        print("selected sector", selected_sector_id )
+        print("selected division", selected_division_id)
+        if selected_sector_id:
+            sector_id = int(selected_sector_id)
+            divisions = divisions.filter(project_type__id=sector_id)
+            particulars = particulars.filter(project_type__id=sector_id)
+
+        if (selected_division_id):
+            division_id = int(selected_division_id)
+            particulars = particulars.filter(division__id=division_id)
+    except ValueError as e:
+        error = f"{e}"
+        
     context = {
         'particulars': particulars, 
         'sectors': sectors, 
@@ -23,7 +42,7 @@ def index(request):
         'particular_form': particular_form,
         'equipment_form': equipment_form,
         'division_form': division_form,
-        
+        'error': error,
     }
 
 
@@ -149,7 +168,7 @@ def import_from_file(request):
 
         except Exception as e:
             messages.error(request, f"Failed to upload the file: {e}")
-            return render(request, 'particular/particulars_list.html', {'error': f"Error reading file: {str(e)}", 'open_modal':True})
+            return render(request, 'particular/particulars_list.html', {'particulars': Particular.objects.all(), 'error': f"Error reading file: {str(e)}", 'open_modal':True})
 
 
     return redirect('particular:particulars')

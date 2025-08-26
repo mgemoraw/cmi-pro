@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+
+{% block content%}
+
+<main class="col-md-10 ms-sm-auto px-md-4">
+
+  <!-- Page Title -->
+  <div class="d-flex justify-content-between flex-wrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Data Instances Sheet </h2>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3">  
+        <h6>Total Instances</h6>
+        <h3>{{instances|length }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3">
+        <h6>Active Particulars</h6>
+        <h3>{{ particulars|length }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3 color-green">
+        <h6>Data Collectors</h6>
+        <h3>25</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-stat shadow-sm p-3 mb-3">
+        <h6>Average Daily Activity</h6>
+        <h3>80</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="row mb-4">
+    <div class="col-md-12 ">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckFormModal">
+        Add New Particular
+      </button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckImportModal">
+        Import from File
+      </button>
+      <button class="btn btn-white " data-bs-toggle="modal" data-bs-target="#">
+        <span class="fa-download"> </span>
+        Download Excel Template
+      </button>
+     
+     
+    </div>
+  </div>
+
+    <form>
+        {% csrf_token %}
+
+        {{ form.as_p }}
+    </form>
+{% endblock content %}

@@ -8,7 +8,7 @@ class DivisionForm(forms.ModelForm):
     """
     A model form for the divisions model
     """
-    sector = forms.ModelChoiceField(
+    project_type = forms.ModelChoiceField(
         queryset = ProjectType.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'}),
         empty_label='-- Select Sector --',
@@ -17,7 +17,7 @@ class DivisionForm(forms.ModelForm):
     class Meta:
         model = Division
         fields = [
-            'sector',
+            'project_type',
             'name',
             'code',
         ]

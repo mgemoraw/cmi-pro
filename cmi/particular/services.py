@@ -41,15 +41,23 @@ class GridDataParser:
                     code=row[3],
                     name=row[4],
                 )
-                particular, created = Particular.objects.get_or_create(
+
+                # check if particular already registered
+                particular = Particular.objects.filter(
                     pid=row[1],
-                    project_type=subsector,
-                    division=division,
-                    task=row[5].strip(),
-                    element=row[6].strip(),
-                    name=row[7].strip(),
-                )
-                
+                ).exists()
+                if particular:
+                    continue
+                else:
+                    particular, created = Particular.objects.get_or_create(
+                        pid=row[1],
+                        project_type=subsector,
+                        division=division,
+                        task=row[5].strip(),
+                        element=row[6].strip(),
+                        name=row[7].strip(),
+                    )
+                    
             return rows  
 
         except Exception as e:

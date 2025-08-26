@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import TipperDataModelForm, ProjectForm
+from .forms import TipperDataModelForm, ProjectForm, DataInstanceForm
+from particular.forms import ParticularForm
 from .models import (
     Project,
     Tipper,
+    Collector,
+    DataInstance,
 )
+from particular.models import Particular
 
 
 
@@ -31,6 +35,26 @@ def user_logout(request):
 
 def dashboard(request):
     return render(request, 'core/dashboard.html', {})
+
+def particular_dashboard(request):
+    particulars = Particular.objects.all()
+    projects = Project.objects.all()
+    collectors = Collector.objects.all()
+    form = ParticularForm()
+
+    context = {'particulars': particulars, "form": form}
+
+    return render(request, 'core/particulars.html', context)
+
+def instance_dashboard(request):
+    instances = DataInstance.objects.all()
+    instance_form = DataInstanceForm()
+    # active_particulars = DataInstance.objects.distinct(particular)
+    context = {
+        'instances': instances,
+        "form": instance_form,
+    }
+    return render(request, 'core/instance_dashboard.html', context=context)
 
 def trucks(request):
     form = TipperDataModelForm(request.POST or None)

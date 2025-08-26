@@ -23,20 +23,32 @@ class Project(models.Model):
 
     # Optional: For full GIS support
     # location = gis_models.PointField(geography=True, null=True, blank=True)
+    engineer = models.ForeignKey('Engineer', null=True, on_delete=models.PROTECT, related_name='project_engieer')
 
     def __str__(self):
         return self.name
     
+class Engineer(models.Model):
+    fname = models.CharField(max_length=255)
+    mname = models.CharField(max_length=255)
+    lname = models.CharField(max_length=255)
+    phone = models.CharField(max_length=15)
+    email = models.CharField(max_length=255)
+
+    def __str__(self):
+        return "{} {}".format(self.fname, self.mname)
 
 
-class CollectorModel(models.Model):
+class Collector(models.Model):
+    project = models.ForeignKey("Project", verbose_name=("_"), on_delete=models.CASCADE)
+    engineer = models.ForeignKey('Engineer', on_delete=models.PROTECT, null=True)
     fname = models.CharField(max_length=100)
     mname = models.CharField(max_length=100)
     lname = models.CharField(max_length=100)
-    phone = models.CharField(unique=True)
+    phone = models.CharField(max_length=15, unique=True)
     
     def __str__(self):
-        return self.name
+        return "{self.fname} {self.mname}"
 
 
 class Tipper(models.Model):
@@ -50,7 +62,6 @@ class Task(models.Model):
     
     def __str__(self):
         return self.name
-
 
 
 class TipperCycle(models.Model):
@@ -84,7 +95,7 @@ class TipperDataModel(models.Model):
     date = models.DateField()
     number_of_equipment_types = models.IntegerField()
     task = models.ForeignKey('Task', on_delete=models.CASCADE)
-    collector = models.ForeignKey('CollectorModel', on_delete=models.CASCADE)
+    collector = models.ForeignKey('Collector', on_delete=models.CASCADE)
     tipper = models.ForeignKey('Tipper', on_delete=models.CASCADE)
 
     # Optional: If you want to link to TipperCycle
@@ -94,3 +105,22 @@ class TipperDataModel(models.Model):
     def __str__(self):
         return f"{self.project.name} - {self.date} - {self.tipper.license_plate}"
     
+
+class DataInstance(models.Model):
+    from particular.models import Particular
+
+    class InstanceChoices(models.TextChoices):
+        ACCEPTED = 'accepted', 'Accepted'
+        REJECTED = 'rejected', 'Rejected'
+        PENDING = 'pending', 'Pending'
+
+    project = models.ForeignKey('Project', on_delete=models.PROTECT, related_name='instance_project')
+    collector = models.ForeignKey('Collector', on_delete=models.CASCADE, related_name='data_collector')
+    
+    particular = models.ForeignKey(Particular, on_delete=models.CASCADE, related_name='instance_particular')
+    date = models.DateField(auto_now_add=True)
+    
+    problems = models.TextField()
+    status = models.CharField(max_length=15, choices=InstanceChoices, default=InstanceChoices.PENDING)
+    encoded = models.BooleanField(default=False)
+    encoder = models.CharField(max_length=255)
