@@ -58,6 +58,9 @@ def instance_dashboard(request):
     }
     return render(request, 'core/instance_dashboard.html', context=context)
 
+def create_instance_view(request):
+    return redirect('core:instances')
+
 def trucks(request):
     form = TipperDataModelForm(request.POST or None)
 
@@ -116,7 +119,7 @@ def truck_create(request):
         return redirect('core:truck', )  # or render with success msg
 
 @login_required
-def settings(request):
+def settings_view(request):
     context = {}
     return render(request, 'core/settings.html', context)
 

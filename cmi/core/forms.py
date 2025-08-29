@@ -88,7 +88,29 @@ class ProjectForm(forms.ModelForm):
 
 
 class DataInstanceForm(forms.ModelForm):
+   
     class Meta:
         model = DataInstance
         fields = "__all__"
+
+        labels = {
+            'project': 'Project',
+            'collector': 'Data Collector',
+            # 'task': 'Task',
+            # 'element': 'Element',
+            'particular': 'Particular',
+            'problems': 'Problems',
+            'status': 'Status',
+            'encoded': 'Encoded',
+            'encoder': 'Data Encoder',
+        }
+
+        widgets = {
+            'project': forms.Select(attrs={'class': 'form-select'}),
+            'problems': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Review Comments'}),
+            'collector': forms.Select(attrs={'class': 'form-select'}),
+            'particular': forms.Select(attrs={'class': 'form-select'}),
+            'status': forms.RadioSelect(),
+            'encoded': forms.CheckboxInput(attrs={'class': 'form-control'}),
+        }
         

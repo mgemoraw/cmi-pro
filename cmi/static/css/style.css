@@ -1,0 +1,34 @@
+/* Settings page specific styles */
+.list-group-item.active {
+    background-color: #085378;
+    border-color: #085378;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.form-check-input:checked {
+    background-color: #085378;
+    border-color: #085378;
+}
+
+.btn-primary {
+    background-color: #085378;
+    border-color: #085378;
+}
+
+.btn-primary:hover {
+    background-color: #063e5a;
+    border-color: #063e5a;
+}
+
+.toast {
+    z-index: 1090;
+}

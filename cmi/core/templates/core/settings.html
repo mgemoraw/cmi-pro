@@ -1,1 +1,306 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="col-md-10 ms-sm-auto px-4 py-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Settings</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-primary" id="saveSettings">
+                <i class="fas fa-save me-1"></i> Save Changes
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Navigation -->
+        <div class="col-md-3">
+            <div class="list-group" id="settings-nav">
+                <a class="list-group-item list-group-item-action active" href="#profile" data-bs-toggle="list">
+                    <i class="fas fa-user me-2"></i> Profile
+                </a>
+                <a class="list-group-item list-group-item-action" href="#account" data-bs-toggle="list">
+                    <i class="fas fa-lock me-2"></i> Account Security
+                </a>
+                <a class="list-group-item list-group-item-action" href="#notifications" data-bs-toggle="list">
+                    <i class="fas fa-bell me-2"></i> Notifications
+                </a>
+                <a class="list-group-item list-group-item-action" href="#preferences" data-bs-toggle="list">
+                    <i class="fas fa-sliders-h me-2"></i> Preferences
+                </a>
+                <a class="list-group-item list-group-item-action" href="#privacy" data-bs-toggle="list">
+                    <i class="fas fa-shield-alt me-2"></i> Privacy
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Content -->
+        <div class="col-md-9">
+            <div class="tab-content" id="settings-content">
+                <!-- Profile Tab -->
+                <div class="tab-pane fade show active" id="profile">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Profile Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" value="John">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" value="Doe">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" value="+1 (555) 123-4567">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="bio" class="form-label">Bio</label>
+                                    <textarea class="form-control" id="bio" rows="3">Project Manager with 5+ years of experience.</textarea>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Security Tab -->
+                <div class="tab-pane fade" id="account">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Change Password</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="currentPassword">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword">
+                                    <div class="form-text">Must be at least 8 characters.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword">
+                                </div>
+                                <button type="button" class="btn btn-primary">Update Password</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Two-Factor Authentication</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Add an extra layer of security to your account by enabling two-factor authentication.</p>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="twoFactorSwitch">
+                                <label class="form-check-label" for="twoFactorSwitch">Enable Two-Factor Authentication</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div class="tab-pane fade" id="notifications">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Notification Preferences</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-3">Email Notifications</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="emailProject" checked>
+                                <label class="form-check-label" for="emailProject">Project updates</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="emailWorkItems" checked>
+                                <label class="form-check-label" for="emailWorkItems">Work item assignments</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="emailSecurity">
+                                <label class="form-check-label" for="emailSecurity">Security alerts</label>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <h6 class="mb-3">Push Notifications</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="pushProject" checked>
+                                <label class="form-check-label" for="pushProject">Project updates</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="pushWorkItems">
+                                <label class="form-check-label" for="pushWorkItems">Work item assignments</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences Tab -->
+                <div class="tab-pane fade" id="preferences">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Application Preferences</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="language" class="form-label">Language</label>
+                                <select class="form-select" id="language">
+                                    <option selected>English</option>
+                                    <option>Spanish</option>
+                                    <option>French</option>
+                                    <option>German</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="timezone" class="form-label">Timezone</label>
+                                <select class="form-select" id="timezone">
+                                    <option selected>(UTC-05:00) Eastern Time</option>
+                                    <option>(UTC-06:00) Central Time</option>
+                                    <option>(UTC-07:00) Mountain Time</option>
+                                    <option>(UTC-08:00) Pacific Time</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dateFormat" class="form-label">Date Format</label>
+                                <select class="form-select" id="dateFormat">
+                                    <option selected>MM/DD/YYYY</option>
+                                    <option>DD/MM/YYYY</option>
+                                    <option>YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                                <label class="form-check-label" for="darkModeSwitch">Enable Dark Mode</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Tab -->
+                <div class="tab-pane fade" id="privacy">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Privacy Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="dataRetention" class="form-label">Data Retention Period</label>
+                                <select class="form-select" id="dataRetention">
+                                    <option selected>12 months</option>
+                                    <option>6 months</option>
+                                    <option>3 months</option>
+                                    <option>1 month</option>
+                                </select>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="dataCollection" checked>
+                                <label class="form-check-label" for="dataCollection">Allow anonymous usage data collection</label>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="personalizedAds" checked>
+                                <label class="form-check-label" for="personalizedAds">Personalized advertising</label>
+                            </div>
+                            <hr>
+                            <h6>Export Your Data</h6>
+                            <p>Download a copy of your personal data.</p>
+                            <button type="button" class="btn btn-outline-primary">
+                                <i class="fas fa-download me-1"></i> Export Data
+                            </button>
+                            <hr>
+                            <h6 class="text-danger">Delete Account</h6>
+                            <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                <i class="fas fa-trash-alt me-1"></i> Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAccountModalLabel">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                <div class="mb-3">
+                    <label for="deleteConfirm" class="form-label">Type "DELETE" to confirm</label>
+                    <input type="text" class="form-control" id="deleteConfirm">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete Account</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Activate tab navigation
+        const triggerTabList = document.querySelectorAll('#settings-nav a')
+        triggerTabList.forEach(triggerEl => {
+            new bootstrap.Tab(triggerEl)
+        })
+        
+        // Save settings button
+        document.getElementById('saveSettings').addEventListener('click', function() {
+            // Here you would typically collect form data and send to server
+            const toast = new bootstrap.Toast(document.createElement('div'));
+            const toastElement = document.createElement('div');
+            toastElement.className = 'toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3';
+            toastElement.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas fa-check-circle me-2"></i> Settings saved successfully!
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+            document.body.appendChild(toastElement);
+            const toastInstance = new bootstrap.Toast(toastElement);
+            toastInstance.show();
+            
+            // Remove toast after animation completes
+            setTimeout(() => {
+                document.body.removeChild(toastElement);
+            }, 3000);
+        });
+        
+        // Delete account confirmation
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            const confirmText = document.getElementById('deleteConfirm').value;
+            if (confirmText === 'DELETE') {
+                alert('Account deletion process initiated (this would actually delete the account in a real application)');
+                bootstrap.Modal.getInstance(document.getElementById('deleteAccountModal')).hide();
+            } else {
+                alert('Please type "DELETE" to confirm');
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -40,10 +40,10 @@
   <!-- Action Buttons -->
   <div class="row mb-4">
     <div class="col-md-12 ">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckFormModal">
-        Add New Particular
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instanceFormModal">
+        Add New Instance
       </button>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckImportModal">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instanceImportModal">
         Import from File
       </button>
       <button class="btn btn-white " data-bs-toggle="modal" data-bs-target="#">
@@ -55,9 +55,50 @@
     </div>
   </div>
 
-    <form>
-        {% csrf_token %}
 
-        {{ form.as_p }}
-    </form>
+<!-- Add Instance Modal -->
+ <div id="instanceFormModal" class="modal fade" tabindex="-2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            
+            <form id="instance-form" method="POST" action="{% url 'core:create-instance' %}">
+                {% csrf_token %}
+
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Create Instance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick='closeInstanceModal' aria-label="Close"></button>
+                </div>
+                <div class="m-3">
+
+                {{form.as_p}}
+                </div>
+                
+            </form>
+
+            <div class="modal-footer">
+            <button class="btn btn-primary" type="submit"> Add Instance </button>
+            <button class="btn btn-primary" id='instance-clear' type="cancel" onclick="clearInstanceForm()"> Clear </button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  // Data Instance modal
+  const instanceForm = document.getElementById('instance-form');
+
+  function openInstanceModal() {
+      new bootstrap.Modal(document.getElementById('instanceFormModal')).show();
+  }
+
+  function closeInstanceModal() {
+
+  }
+  //close division modal
+  function closeInstanceModal() {
+      instanceForm.reset();
+      var instanceModal = bootstrap.Modal.getInstance(document.getElementById('instanceFormModal'));
+      instanceModal.hide();
+  }
+</script>
 {% endblock content %}

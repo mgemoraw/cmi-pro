@@ -8,11 +8,12 @@ app_name = 'core'
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
-    path('settings/', views.settings, name='settings'),
+    path('settings/', views.settings_view, name='settings'),
     path('projects/', views.projects, name='projects'),
     path('projects/create/', views.create_project, name='create_project'),
     path('particulars/', views.particular_dashboard, name='particulars'),
     path('instances/', views.instance_dashboard, name='instances'),
+    path('instances/create/', views.create_instance_view, name='create-instance'),
     path('work-items/', views.work_items, name='work-items'),
     path('truck/', views.trucks, name='truck'),
     path('truck/create/', views.trucks, name='truck_create'),
