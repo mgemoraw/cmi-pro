@@ -3,13 +3,17 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
-from .forms import TipperDataModelForm, ProjectForm, DataInstanceForm
+from .forms import TipperDataModelForm, ProjectForm, DataInstanceForm,DataCollectorForm, EngineerForm
 from particular.forms import ParticularForm
 from .models import (
     Project,
     Tipper,
     Collector,
     DataInstance,
+    Engineer,
+    Task,
+    TipperCycle,
+    TipperDataModel,
 )
 from particular.models import Particular
 
@@ -69,9 +73,27 @@ def trucks(request):
 
 def projects(request):
     projects = Project.objects.all()
-    form = ProjectForm(request.POST or None)
+    project_form = ProjectForm(request.POST or None)
+    data_collector_form = DataCollectorForm(request.POST or None)
+    data_engineer_form = EngineerForm(request.POST or None)
+    context = {
+        'projects': projects, 
+        'project_form': project_form, 
+        'data_collector_form': data_collector_form, 
+        'data_engineer_form': data_engineer_form
+    }
+    
+    if request.method == 'POST':
+        if 'submit_project' in request.POST:
+            if project_form.is_valid():
+                project_form.save()
+                return redirect('core:projects')
+        elif 'submit_collector' in request.POST:
+            if data_collector_form.is_valid():
+                data_collector_form.save()
+                return redirect('core:projects')
 
-    return render(request, 'core/projects.html', {'projects': projects, 'form': form})
+    return render(request, 'core/projects.html', context=context)
 
 def create_project(request):
     if request.method == 'POST':
@@ -104,6 +126,30 @@ def create_project(request):
         if form.is_valid():
             form.save()
             return redirect('core:projects')
+    return redirect('core:projects')
+
+
+def add_collector(request):
+    if request.method == 'POST':
+        fname = request.POST.get('fname')
+        mname = request.POST.get('mname')
+        lname = request.POST.get('lname')
+        phone = request.POST.get('phone')
+        project_id = request.POST.get('project')
+        engineer_id = request.POST.get('engineer')
+        project = Project.objects.get(id=project_id)
+        engineer = None
+        if engineer_id:
+            engineer = Engineer.objects.get(id=engineer_id)
+        Collector.objects.create(
+            fname=fname,
+            mname=mname,
+            lname=lname,
+            phone=phone,
+            project=project,
+            engineer=engineer
+        )
+        return redirect('core:projects')
     return redirect('core:projects')
 
 

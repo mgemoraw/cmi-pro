@@ -1,5 +1,5 @@
 from django import forms
-from .models import TipperDataModel, Project, DataInstance, Task, Tipper, Collector, TipperCycle
+from .models import TipperDataModel, Project, DataInstance, Task, Tipper, Collector, TipperCycle, Engineer
 
 class TipperDataModelForm(forms.ModelForm):
     class Meta:
@@ -39,6 +39,24 @@ class TipperDataModelForm(forms.ModelForm):
 #                 field.widget.attrs['class'] = 'form-control'
 
 
+class EngineerForm(forms.ModelForm):
+    class Meta:
+        model = Engineer
+        fields = '__all__'
+        labels = {
+            'fname': 'First Name',
+            'mname': 'Middle Name',
+            'lname': 'Last Name', 
+            'phone': 'Phone Number',
+            'email': 'Email Address',
+        }
+        widgets = {
+            'fname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'mname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Middle Name'}),
+            'lname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
+        }
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -113,4 +131,26 @@ class DataInstanceForm(forms.ModelForm):
             'status': forms.RadioSelect(),
             'encoded': forms.CheckboxInput(attrs={'class': 'form-control'}),
         }
-        
+    
+
+class DataCollectorForm(forms.ModelForm):
+    class Meta:
+        model = Collector
+        fields = '__all__'
+        labels = {
+            'project': 'Project',
+            'engineer': 'Engineer',
+            'fname': 'First Name',
+            'mname': 'Middle Name',
+            'lname': 'Last Name',
+            'phone': 'Phone Number',
+        }
+        widgets = {
+            'project': forms.Select(attrs={'class': 'form-select'}),
+            'engineer': forms.Select(attrs={'class': 'form-select'}),
+            'fname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'mname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Middle Name'}),
+            'lname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+        }
+

@@ -47,7 +47,17 @@
       </button>
       <button class="btn btn-white " data-bs-toggle="modal" data-bs-target="#">
         <span class="fa-download"> </span>
-        Download Excel Template
+        Download Excel Templates
+      </button>
+
+       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#engineerFormModal">
+        <span class="fa-add"> </span>
+        Add Data Engineer
+      </button>
+
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataCollectorFormModal">
+        <span class="fa-add"> </span>
+        Add Data Collector
       </button>
      
      
@@ -113,82 +123,82 @@
           
           <div class="row">
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{ form.name.label }}">{{ form.name.label }}</label>
+              <label for="{{ project_form.name.label }}">{{ project_form.name.label }}</label>
             
-              {{ form.name }}
+              {{ project_form.name }}
 
             </div>
             
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.code.label}}">{{form.code.label}}</label>
+              <label for="{{project_form.code.label}}">{{project_form.code.label}}</label>
            
-              {{ form.code }}
+              {{ project_form.code }}
 
             </div>
           </div>
           <div class="col-12 mb-3">
-              <label for="{{form.description.label}}">{{form.description.label}}</label>
-              {{ form.description }}
+              <label for="{{project_form.description.label}}">{{project_form.description.label}}</label>
+              {{ project_form.description }}
           </div>
 
           <div class="row">
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{ form.start_date.label }}">{{ form.start_date.label }}</label>
+              <label for="{{ project_form.start_date.label }}">{{ project_form.start_date.label }}</label>
             
-              {{ form.start_date }}
+              {{ project_form.start_date }}
 
             </div>
             
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.end_date.label}}">{{form.end_date.label}}</label>
+              <label for="{{project_form.end_date.label}}">{{project_form.end_date.label}}</label>
            
-              {{ form.end_date }}
+              {{ project_form.end_date }}
 
             </div>
 
             <h3> Project Address </h3>
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.region.label}}">{{form.region.label}}</label>
+              <label for="{{project_form.region.label}}">{{project_form.region.label}}</label>
            
-              {{ form.region }}
+              {{ project_form.region }}
 
             </div>
              <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.zone.label}}">{{form.zone.label}}</label>
+              <label for="{{project_form.zone.label}}">{{project_form.zone.label}}</label>
            
-              {{ form.zone }}
+              {{ project_form.zone }}
 
             </div>
              <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.woreda.label}}">{{form.woreda.label}}</label>
+              <label for="{{project_form.woreda.label}}">{{project_form.woreda.label}}</label>
            
-              {{ form.woreda }}
-
-            </div>
-
-             <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.kebele.label}}">{{form.kebele.label}}</label>
-           
-              {{ form.kebele }}
+              {{ project_form.woreda }}
 
             </div>
 
              <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.town.label}}">{{form.town.label}}</label>
+              <label for="{{project_form.kebele.label}}">{{project_form.kebele.label}}</label>
            
-              {{ form.town }}
+              {{ project_form.kebele }}
+
+            </div>
+
+             <div class="col-md-6 col-12 mb-3">
+              <label for="{{project_form.town.label}}">{{project_form.town.label}}</label>
+           
+              {{ project_form.town }}
 
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.latitute.label}}">{{form.latitude.label}}</label>
-              {{form.latitude}}
+              <label for="{{project_form.latitute.label}}">{{project_form.latitude.label}}</label>
+              {{project_form.latitude}}
             </div>
             <div class="col-md-6 col-12 mb-3">
-              <label for="{{form.longitude.label}}">{{form.longitude.label}}</label>
-              {{form.longitude}}
+              <label for="{{project_form.longitude.label}}">{{project_form.longitude.label}}</label>
+              {{project_form.longitude}}
             </div>
           </div>
           {% comment %} <div class="row">
@@ -230,6 +240,49 @@
             <input type="file" class="form-control" id="excelFile" name="excel_file" accept=".xlsx, .xls">
           </div>
           <button type="submit" class="btn btn-success">Import</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 📥 Add New Data Engineer Modal -->
+<div class="modal fade" id="engineerFormModal" tabindex="-1" aria-labelledby="engineerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="engineerModalLabel">Data Engineer Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" id="engineerForm">
+          {% csrf_token %}
+
+          {{ data_engineer_form.as_p }}
+          
+          <button type="submit" class="btn btn-success">Add </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 📥 Add New Data Collector Modal -->
+<div class="modal fade" id="dataCollectorFormModal" tabindex="-1" aria-labelledby="dataCollectorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">Data Collector Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" id="dataCollectorForm">
+          {% csrf_token %}
+
+          {{ data_collector_form.as_p }}
+          
+          <button type="submit" class="btn btn-success">Add </button>
         </form>
       </div>
     </div>
