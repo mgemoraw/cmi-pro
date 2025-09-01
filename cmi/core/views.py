@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -16,7 +17,7 @@ from .models import (
     TipperDataModel,
 )
 from particular.models import Particular
-
+from .services import  ProjectDataParser, ProjectDataTemplateGenerator
 
 
 # Create your views here.
@@ -73,60 +74,129 @@ def trucks(request):
 
 def projects(request):
     projects = Project.objects.all()
-    project_form = ProjectForm(request.POST or None)
-    data_collector_form = DataCollectorForm(request.POST or None)
-    data_engineer_form = EngineerForm(request.POST or None)
+    engineers = Engineer.objects.all()
+    collectors = Collector.objects.all()
+    project_form = ProjectForm()
+    engineer_form = EngineerForm()
+    collector_form = DataCollectorForm()
+    project_form = ProjectForm()
     context = {
-        'projects': projects, 
-        'project_form': project_form, 
-        'data_collector_form': data_collector_form, 
-        'data_engineer_form': data_engineer_form
+        "projects": projects,
+        'engineers': engineers,
+        'collectors': collectors,
+        
     }
-    
-    if request.method == 'POST':
-        if 'submit_project' in request.POST:
-            if project_form.is_valid():
-                project_form.save()
-                return redirect('core:projects')
-        elif 'submit_collector' in request.POST:
-            if data_collector_form.is_valid():
-                data_collector_form.save()
-                return redirect('core:projects')
 
+    if request.method == "GET":
+        selected_type = request.GET.get('projectInfo')
+        label = f"{selected_type}_form"
+        context[label] = selected_type
     return render(request, 'core/projects.html', context=context)
 
 def create_project(request):
+    projects = Project.objects.all()
     if request.method == 'POST':
-        # name = request.POST.get("name")
-        # description = request.POST.get("description")
-        # code = request.POST.get("code")
-        # region = request.POST.get("region")
-        # zone = request.POST.get("zone")
-        # woreda = request.POST.get("woreda")
-        # kebele = request.POST.get("kebele")
-        # town = request.POST.get("town")
-        # latitude = request.POST.get("latitude")
-        # longitude = request.POST.get("longitude")
+        form_type = request.POST.get('projectInfo')
+        if form_type =='project':
+            project_form = ProjectForm(request.POST)
+            if project_form.is_valid():
+                project_form.save()
+                return redirect('core:projects')
+            
+        if form_type =='engineer':
+            engineer_form = EngineerForm(request.POST)
+            if engineer_form.is_valid():
+                engineer_form.save()
+                return redirect('core:projects')
+        if form_type == 'collector':
+            collector_form = DataCollectorForm(request.POST)
+            if collector_form.is_valid():
+                collector_form.save()
+                return redirect("core:projects")
+    else:
+        project_form = ProjectForm()
+        engineer_form = EngineerForm()
+        collector_form = DataCollectorForm()
+   
+        context = {
+            'projects': projects,
+            'project_form': project_form,
+            'engineer_form': engineer_form,
+            'collector_form': collector_form,
+        }
+        return render(request, 'core/projects.html', context)
 
-        # # create new project
-        # new_project = Project.objects.create(
-        #     name=name,
-        #     code=code,
-        #     description=description,
-        #     region=region,
-        #     zone=zone,
-        #     woreda=woreda,
-        #     kebele=kebele,
-        #     town=town,
-        #     latitude=latitude,
-        #     longitude=longitude,
-        # )
-
-        form = ProjectForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('core:projects')
+def download_template(request):
+    """
+    View to handle template file downloads.
+    URL: /download_template/<str:data_type>/<str:file_format>/
+    
+    """
+    if request.method == "POST":
+        file_format = request.POST.get('dataFormat')
+        data_type = request.POST.get('projectInfo')
+        try:
+            generator = ProjectDataTemplateGenerator(data_type=data_type)
+            output_file = generator.create_template(file_format=file_format)
+            
+            file_name = f"{data_type}_template.{file_format}"
+            response = HttpResponse(output_file.read(), content_type=f'application/{file_format}')
+            response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+            return response
+        except ValueError as e:
+            return HttpResponse(str(e), status=400)
     return redirect('core:projects')
+
+def import_project_data(request):
+    context = {}
+    if request.method == "POST":
+        record_type = request.POST.get("projectInfo")
+        uploaded_file = request.FILES.get("data_file")
+        # print(record_type)
+        # print(uploaded_file)
+
+        try:
+           
+            if (record_type == 'null') or (uploaded_file == None):
+                messages.error(request, 'No file selected')
+                return redirect('core:projects')
+            
+            parser = ProjectDataParser(data_file=uploaded_file, data_type=record_type)
+            parsed_data = parser.parse()
+
+            if record_type == 'collector':
+                # process collector data
+                messages.success(request, "Collecters Information uploaded")
+                return redirect('core:projects')
+                
+            elif record_type == 'engineer':
+                # process eingineer data
+                messages.success(request, "Engineeers Information uploaded")
+                return redirect('core:projects')
+
+            elif record_type == 'project':
+                # process project data
+                messages.success(request, "Project Information uploaded")
+                return redirect('core:projects')
+        
+            else:
+                messages.warning(request, message="Data format Unknown")
+                return redirect('core:projects')
+
+                
+            
+            # Now, 'parsed_data' is a list of dictionaries. 
+            # You can iterate through it to save data to your Django models.
+            # Example:
+            # for row in parsed_data:
+            #     Project.objects.create(**row)
+            
+            return HttpResponse("Data imported successfully!", status=200)
+        except ValueError as e:
+            messages.error(request, "Please upload file")
+            return HttpResponse(str(e), status=400)
+        
+    return render(request, 'core/projects.html', context)
 
 
 def add_collector(request):

@@ -23,7 +23,7 @@ class Project(models.Model):
 
     # Optional: For full GIS support
     # location = gis_models.PointField(geography=True, null=True, blank=True)
-    engineer = models.ForeignKey('Engineer', null=True, on_delete=models.PROTECT, related_name='project_engieer')
+    # engineer = models.ForeignKey('Engineer', null=True, on_delete=models.PROTECT, related_name='project_engieer')
 
     def __str__(self):
         return self.name

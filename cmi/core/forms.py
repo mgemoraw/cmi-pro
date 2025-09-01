@@ -94,8 +94,8 @@ class ProjectForm(forms.ModelForm):
 
             'latitude': forms.TextInput(attrs={'class': 'form-control'}),
             'longitude': forms.TextInput(attrs={'class': 'form-control'}),
-
         }
+        
     # def __init__(self, args, **kwargs):
     #     super(ProjectForm, self).__init__(*args, **kwargs)
     #     for field_name, field, in self.fields.items():

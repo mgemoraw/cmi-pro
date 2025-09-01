@@ -13,25 +13,25 @@
     <div class="col-md-3">
       <div class="card card-stat shadow-sm p-3 mb-3">  
         <h6>Active Projects</h6>
-        <h3>4</h3>
+        <h3>{{ projects|length }}</h3>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card card-stat shadow-sm p-3 mb-3">
         <h6>Active Particulars</h6>
-        <h3>20</h3>
+        <h3>{{particulars|length}}</h3>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card card-stat shadow-sm p-3 mb-3 color-green">
-        <h6>Data Collectors</h6>
-        <h3>25</h3>
+        <h6>Data Engineers:</h6>
+        <h3>{{engineers|length}}</h3>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card card-stat shadow-sm p-3 mb-3">
-        <h6>Average Daily Activity</h6>
-        <h3>80</h3>
+        <h6>Data Collectors:</h6>
+        <h3>{{collectors|length}}</h3>
       </div>
     </div>
   </div>
@@ -39,24 +39,27 @@
   <!-- Action Buttons -->
   <div class="row mb-4">
     <div class="col-md-12 ">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckFormModal">
-        Add New Project
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#projectFormsModal">
+        <span class="fa fa-add"> </span>
+        Add Project Information
       </button>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#truckImportModal">
-        Import from File
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataImportModal">
+        <span class="fa fa-upload"> </span>
+        Import Data From File
       </button>
-      <button class="btn btn-white " data-bs-toggle="modal" data-bs-target="#">
-        <span class="fa-download"> </span>
+      <button class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#downloadTemplateModal">
+        <span class="fa fa-download"> </span>
         Download Excel Templates
       </button>
+      
 
        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#engineerFormModal">
-        <span class="fa-add"> </span>
+        <span class="fa fa-add"> </span>
         Add Data Engineer
       </button>
 
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dataCollectorFormModal">
-        <span class="fa-add"> </span>
+        <span class="fa fa-add"> </span>
         Add Data Collector
       </button>
      
@@ -101,7 +104,7 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <h5 class="card-title">Project Productivity Trends</h5>
-          <canvas id="truckProductivityChart"></canvas>
+          <canvas id="prjectStatusChart"></canvas>
         </div>
       </div>
     </div>
@@ -109,98 +112,51 @@
 
 </main>
 
-<!-- 🚚 Modal: Add Truck -->
-<div class="modal fade" id="truckFormModal" tabindex="-1" aria-labelledby="truckModalLabel" aria-hidden="true">
+<!-- 🚚 Modal: Project Information -->
+<div class="modal fade" id="projectFormsModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- Centered for better UX -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="truckModalLabel">Add New Project Record</h5>
+        <h5 class="modal-title text-center" id="truckModalLabel">Project Data Form </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <form method="get" id="projectDataTypeForm" action="{% url 'core:projects' %}">
+          {% csrf_token %}
+
+          <div>
+              <label for="projectInfo">Select Data to be added </label>
+              <select id="projectInfo" name="projectInfo" class="form-control" required>
+                <option value="null">Select Data To be added</option>
+                <option value="project">New Project Record</option>
+                <option value="engineer">New Engineer </option>
+                <option value="collector">New Collector </option>
+              </select>
+          </div>
+        <button type="submit">Go</button>
+        </form>
         <form method="post" id="truckForm" action="{% url 'core:create_project' %}">
           {% csrf_token %}
-          
-          <div class="row">
-            <div class="col-md-6 col-12 mb-3">
-              <label for="{{ project_form.name.label }}">{{ project_form.name.label }}</label>
-            
-              {{ project_form.name }}
 
-            </div>
-            
-            <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.code.label}}">{{project_form.code.label}}</label>
-           
-              {{ project_form.code }}
-
-            </div>
+          {% if project_form %}
+          <div id="project_form" class="form-container" style="display: none;">
+              <h3>Create New Project Record</h3>
+              {{ project_form.as_p }}
           </div>
-          <div class="col-12 mb-3">
-              <label for="{{project_form.description.label}}">{{project_form.description.label}}</label>
-              {{ project_form.description }}
+          {% endif %}
+          {% if engineer_form %}
+          <div id="engineer_form" class="form-container" style="display: none;">
+              <h3>Create New Engineer</h3>
+              {{ engineer_form.as_p }}
           </div>
-
-          <div class="row">
-            <div class="col-md-6 col-12 mb-3">
-              <label for="{{ project_form.start_date.label }}">{{ project_form.start_date.label }}</label>
-            
-              {{ project_form.start_date }}
-
-            </div>
-            
-            <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.end_date.label}}">{{project_form.end_date.label}}</label>
-           
-              {{ project_form.end_date }}
-
-            </div>
-
-            <h3> Project Address </h3>
-            <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.region.label}}">{{project_form.region.label}}</label>
-           
-              {{ project_form.region }}
-
-            </div>
-             <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.zone.label}}">{{project_form.zone.label}}</label>
-           
-              {{ project_form.zone }}
-
-            </div>
-             <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.woreda.label}}">{{project_form.woreda.label}}</label>
-           
-              {{ project_form.woreda }}
-
-            </div>
-
-             <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.kebele.label}}">{{project_form.kebele.label}}</label>
-           
-              {{ project_form.kebele }}
-
-            </div>
-
-             <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.town.label}}">{{project_form.town.label}}</label>
-           
-              {{ project_form.town }}
-
-            </div>
+          {% endif %}
+          {% if collector_form %}
+          <div id="collector_form" class="form-container" style="display: none;">
+              <h3> Create New Data Collector Record</h3>
+              {{ collector_form.as_p }}
           </div>
-
-          <div class="row">
-            <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.latitute.label}}">{{project_form.latitude.label}}</label>
-              {{project_form.latitude}}
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-              <label for="{{project_form.longitude.label}}">{{project_form.longitude.label}}</label>
-              {{project_form.longitude}}
-            </div>
-          </div>
+         {% endif %}
+         
           {% comment %} <div class="row">
             {% for field in form %}
               <div class="col-md-6 col-12 mb-3">
@@ -214,7 +170,7 @@
 
           </div> {% endcomment %}
           <div class="mt-3">
-            <button type="cancel" class="btn btn-primary" >Clear</button>
+            <button type="cancel" class="btn btn-primary" onclick="clearForms()" >Clear</button>
             <button type="submit" class="btn btn-success">Save Record</button>
           </div>
         </form>
@@ -225,19 +181,30 @@
 
 
 <!-- 📥 Modal: Import from Excel -->
-<div class="modal fade" id="truckImportModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+<div class="modal fade" id="dataImportModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="importModalLabel">Import Trucks from Excel</h5>
+        <h5 class="modal-title" id="importModalLabel">Import Data from File</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="post" enctype="multipart/form-data" id="importForm">
+        <form method="post" enctype="multipart/form-data" id="importForm" action="{% url 'core:import-project-data' %}">
           {% csrf_token %}
+
+          <div>
+            <label for="projectInfo">Select Data to be added </label>
+            <select id="projectInfo" name="projectInfo" class="form-control" required>
+              <option value="null">Select Data To be added</option>
+              <option value="project"> Project Records</option>
+              <option value="engineer">Data Engineers </option>
+              <option value="collector">Data Collectors  </option>
+            </select>
+          </div>
           <div class="mb-3">
+            
             <label for="excelFile" class="form-label">Upload Excel File</label>
-            <input type="file" class="form-control" id="excelFile" name="excel_file" accept=".xlsx, .xls">
+            <input type="file" class="form-control" id="excelFile" name="data_file" accept=".xlsx, .xls">
           </div>
           <button type="submit" class="btn btn-success">Import</button>
         </form>
@@ -245,6 +212,53 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- 📥 Modal: Download Tempelate -->
+<div class="modal fade" id="downloadTemplateModal" tabindex="-1" aria-labelledby="downloadTemplateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="downloadTemplateModalLabel">Download Templates</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" id="downloadTemplateForm" action="{% url 'core:download-template' %}">
+          {% csrf_token %}
+
+          <div class="row flex">
+            <div>
+              <label for="projectInfo">Select Data to be added </label>
+              <select id="projectInfo" name="projectInfo" class="form-control" required>
+                <option value="null">Select Data To be added</option>
+                <option value="project"> Project Records</option>
+                <option value="engineer">Data Engineers </option>
+                <option value="collector">Data Collectors  </option>
+              </select>
+            </div>
+
+            <div>
+              <label for="dataFormat">Select Format </label>
+              <select id="dataFormat" name="dataFormat" class="form-control" required>
+                <option value="null">Data Format</option>
+                <option value="xlsx"> Excel (xlsx or xls) File format</option>
+                <option value="csv">CSV Comma Separated </option>
+              </select>
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-success">
+            <span class="fa-download"></span>
+            Download
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <!-- 📥 Add New Data Engineer Modal -->
 <div class="modal fade" id="engineerFormModal" tabindex="-1" aria-labelledby="engineerModalLabel" aria-hidden="true">
@@ -258,7 +272,7 @@
         <form method="post" enctype="multipart/form-data" id="engineerForm">
           {% csrf_token %}
 
-          {{ data_engineer_form.as_p }}
+          {{ engineer_form.as_p }}
           
           <button type="submit" class="btn btn-success">Add </button>
         </form>
@@ -273,14 +287,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="importModalLabel">Data Collector Form</h5>
+        <h5 class="modal-title" id="collectorModalLabel">Data Collector Form</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form method="post" enctype="multipart/form-data" id="dataCollectorForm">
           {% csrf_token %}
 
-          {{ data_collector_form.as_p }}
+          {{ collector_form.as_p }}
           
           <button type="submit" class="btn btn-success">Add </button>
         </form>
@@ -288,17 +302,85 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
-<!-- ✅ Bootstrap JS Bundle (Required for modals) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- ✅ Chart.js for the chart -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  const ctx = document.getElementById('truckProductivityChart').getContext('2d');
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const selecElement = document.getElementById('projectInfo');
+    const formContainers = document.querySelectorAll('.form-container');
+
+    selecElement.addEventListener('change', function(){
+      const selectedValue = this.value;
+
+      // Hide all form containers first
+      // formContainers.forEach(container => {
+      //  container.style.display = "none";
+     //  });
+      // Get the base URL from the form's action attribute
+      const form = document.getElementById('projectDataTypeForm');
+      const baseUrl = form.getAttribute('action');
+
+      // show the form that matches the selected value
+      if (selectedValue) {
+        // Construct the new URL with the query parameter
+          const newUrl = `${baseUrl}?projectInfo=${selectedValue}`;
+          // Redirect the user to the new URL
+          window.location.href = newUrl;
+          /*
+        const targetFormId = selectedValue + "_form";
+        const targetForm = document.getElementById(targetFormId);
+        if (targetForm) {
+          targetForm.style.display = "block";
+        }
+        */
+      }  else {
+            // Optional: Redirect to the base URL if nothing is selected
+            window.location.href = baseUrl;
+        }
+    })
+  })
+
+  // Function to clear all forms
+  const forms = ['project_form', 'engineer_form', 'collector_form'];
+  function clearForms() {
+    forms.forEach(formId => {
+      const form = document.getElementById(formId);
+      if (form) {
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+          if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+          } else {
+            input.value = '';
+          }
+        });
+        form.style.display = 'none'; // Hide the form after clearing
+      }
+    });
+
+    // Reset the dropdown to default
+    const selectElement = document.getElementById('projectInfo');
+    if (selectElement) {
+      selectElement.value = 'null';
+    }
+  }
+
+   selectElement.addEventListener('change', function() {
+      const selectedValue = this.value;
+
+    // Get the base URL from the form's action attribute
+    const form = document.getElementById('projectDataTypeForm');
+    const baseUrl = form.getAttribute('action');
+   });
+
+   
+  const ctx = document.getElementById('prjectStatusChart').getContext('2d');
   const truckProductivityChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -322,3 +404,5 @@
   });
 </script>
 {% endblock %}
+
+
