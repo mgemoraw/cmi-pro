@@ -66,6 +66,32 @@ def instance_dashboard(request):
 def create_instance_view(request):
     return redirect('core:instances')
 
+def import_instances(request):
+    context = {}
+    if request.method == "POST":
+        uploaded_file = request.FILES.get("dataFile")
+        # print(record_type)
+        # print(uploaded_file)
+
+        try:
+            if uploaded_file == None:
+                messages.error(request, 'No file selected')
+                return redirect('core:instances')
+            
+            parser = ProjectDataParser(data_file=uploaded_file, data_type='instance')
+            parsed_data = parser.parse()
+
+            messages.success(request, "Instance Records uploaded")
+            return redirect('core:instances')
+        
+        except ValueError as e:
+            messages.error(request, "Please upload file")
+            return HttpResponse(str(e), status=400)
+        
+    return render(request, 'core/instance_dashboard.html', context)
+
+
+
 def trucks(request):
     form = TipperDataModelForm(request.POST or None)
 

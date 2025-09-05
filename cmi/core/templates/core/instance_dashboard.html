@@ -83,6 +83,30 @@
     </div>
 </div>
 
+
+<!-- 📥 Modal: Import from Excel -->
+<div class="modal fade" id="instanceImportModal" tabindex="-1" aria-labelledby="instanceImportModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="instanceImportModalLabel">Import Instance Records</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" enctype="multipart/form-data" id="instanceImportForm" action="{% url 'core:import-instances' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="dataFile" class="form-label">Upload Excel File</label>
+            <input type="file" class="form-control" id="dataFile" name="dataFile" accept=".xlsx, .xls">
+          </div>
+          <button type="submit" class="btn btn-success">Import</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
   // Data Instance modal
   const instanceForm = document.getElementById('instance-form');

@@ -16,6 +16,7 @@ urlpatterns = [
     path('particulars/', views.particular_dashboard, name='particulars'),
     path('instances/', views.instance_dashboard, name='instances'),
     path('instances/create/', views.create_instance_view, name='create-instance'),
+    path('instances/import/', views.import_instances, name='import-instances'),
     path('work-items/', views.work_items, name='work-items'),
     path('truck/', views.trucks, name='truck'),
     path('truck/create/', views.trucks, name='truck_create'),
