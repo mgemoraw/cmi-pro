@@ -18,6 +18,7 @@ from .models import (
 )
 from particular.models import Particular
 from .services import  ProjectDataParser, ProjectDataTemplateGenerator
+from core.utils.instance_parser import InstanceDataParser
 
 
 # Create your views here.

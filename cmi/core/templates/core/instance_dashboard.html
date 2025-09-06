@@ -26,7 +26,7 @@
     <div class="col-md-3">
       <div class="card card-stat shadow-sm p-3 mb-3 color-green">
         <h6>Data Collectors</h6>
-        <h3>25</h3>
+        <h3>{{ collectors|length }}</h3>
       </div>
     </div>
     <div class="col-md-3">
@@ -46,11 +46,10 @@
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instanceImportModal">
         Import from File
       </button>
-      <button class="btn btn-white " data-bs-toggle="modal" data-bs-target="#">
-        <span class="fa-download"> </span>
-        Download Excel Template
+      <button class="btn btn-secondary " data-bs-toggle="modal" data-bs-target="#">
+        <span class="fa fa-download"> </span>
+        Download Template
       </button>
-     
      
     </div>
   </div>
