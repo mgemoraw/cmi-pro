@@ -102,12 +102,12 @@ class CrewWillingnessChoices(models.IntegerChoices):
     HIGH = 4, 'Willing'
     VERY_HIGH = 5, 'Completely Willing'
 
-class CraftsmenEducationChoices(models.TextChoices):
+class CraftsmenEducationChoices(models.IntegerChoices):
     ELEMENTARY = 1, "Elementary"
     HIGHSCHOOL = 2, "Highschool"
-    TECHNICAL = 3, 'Technical'
-    COLLEGE = 4, 'College'
-    UNIVERSITY = 5, 'University'
+    TECHNICAL = 3, "Technical"
+    COLLEGE = 4, "College"
+    UNIVERSITY = 5, "University"
 
 class DailyVariables(models.Model):
     # crew Properties
