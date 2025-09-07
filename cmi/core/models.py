@@ -235,6 +235,30 @@ class TipperDataModel(models.Model):
     
 
 
+class FormType(models.Model):
+    FormTypeChoices = [
+        ('dozer', 'Dozer'),
+        ('excavator', 'Excavator'),
+        ('tipper', 'Tipper'),
+        ('mpdm', 'MPDM'),
+        ('labor', 'Labor'),
+        ('ws', 'Work Sampling'),
+        ('dv', 'Daily Variables'),
+        ('project', 'Project Details'),
+    ]
+
+    form_name = models.CharField(max_length=100, unique=True, choices=FormTypeChoices,)
+    particular = models.ForeignKey('Particular', on_delete=models.CASCADE, related_name='particular_forms')
+    equipment = models.ForeignKey('WorkEquipment', on_delete=models.CASCADE, related_name='work_equipment_forms', null=True, blank=True)
+    description = models.TextField(blank=True)
+    # file = models.FileField(upload_to='particular_forms/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Form for {self.particular.pid} - {self.form_name}"
+    
+
 def instance_raw_file_path(instance, filename):
     return f"instances/{instance.particular.pid}/raw/{filename}"
 

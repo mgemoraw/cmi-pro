@@ -36,6 +36,7 @@ class Division(models.Model):
 
 class WorkEquipment(models.Model):
     name = models.CharField(max_length=255)
+    equipment_type = models.CharField(max_length=100)
     description = models.TextField()
     unit = models.CharField(max_length=50, null=True)
     count = models.PositiveIntegerField(default=1)
@@ -94,3 +95,4 @@ class Particular(models.Model):
 
     def __str__(self):
         return f"{self.pid}-{self.task} {self.element} {self.name}"
+
