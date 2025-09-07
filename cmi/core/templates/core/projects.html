@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <!-- Truck Details Table -->
+  <!-- Project Details Table -->
   <div class="row mb-4">
     <div class="col-md-12">
       <div class="card shadow-sm p-3 mb-3">
@@ -77,7 +77,7 @@
             <tr>
               <th>Project ID</th>
               <th>Type</th>
-              <th>Status</th>
+              <th>Project Location</th>
               <th>Collectors</th>
             </tr>
           </thead>
@@ -87,8 +87,89 @@
             <tr>
               <td>{{project.code}}</td>
               <td>{{project.name}}</td>
-              <td>{{project.zone}}</td>
-              <td>{{project.woreda}}</td>
+              <td>{{project.zone}}, {{project.woreda}}, {{project.kebele}}, {{project.town}}</td>
+              <td>{{project.collectors.count}}</td>
+            </tr>
+            {% endfor %}
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Project Data Engineers Table -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm p-3 mb-3">
+        <h5 class="card-title">Project Data Engineers</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Assigned Projects</th>
+              <th>Full Name</th>
+              <th>Phone Number</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for engineer in engineers %}
+            <tr>
+              <td>
+                {% for project in engineer.projects.all %}
+                  {{ project.name }}{% if not forloop.last %}, {% endif %}
+                  
+                  {% empty %}
+                  No Projects Assigned
+                {% endfor %}
+
+              </td>
+              <td>{{engineer.fname}} {{engineer.mname}}</td>
+              <td>{{engineer.phone}}</td>
+              <td>{{engineer.email}}</td>
+            </tr>
+            {% endfor %}
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Project Data Collectors Table -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm p-3 mb-3">
+        <h5 class="card-title">Project Data Collectors </h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Assigned Projects</th>
+              <th>Full Name</th>
+              <th>Phone Number</th>
+              <th> Collected Data</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for collector in collectors %}
+            <tr>
+              <td>
+                {% for project in collector.projects.all %}
+                  {{ project.name }}{% if not forloop.last %}, {% endif %}
+                  
+                  {% empty %}
+                  No Projects Assigned
+                {% endfor %}
+
+              </td>
+              <td>{{collector.fname}} {{collector.mname}}</td>
+              <td>{{collector.phone}}</td>
+              <td>{{collector.instances|length}}</td>
             </tr>
             {% endfor %}
             
@@ -121,6 +202,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        {% comment %} 
         <form method="get" id="projectDataTypeForm" action="{% url 'core:projects' %}">
           {% csrf_token %}
 
@@ -133,17 +215,31 @@
                 <option value="collector">New Collector </option>
               </select>
           </div>
-        <button type="submit">Go</button>
+       
         </form>
-        <form method="post" id="truckForm" action="{% url 'core:create_project' %}">
+        {% endcomment %}
+        <form method="post" id="projectDataForm" action="{% url 'core:create_project' %}">
           {% csrf_token %}
 
+          <div>
+              <label for="projectInfo">Select Data to be added </label>
+              <select id="projectInfo" name="projectInfo" class="form-control" required>
+                <option value="null">Select Data To be added</option>
+                <option value="project">New Project Record</option>
+                <option value="engineer">New Engineer </option>
+                <option value="collector">New Collector </option>
+              </select>
+          </div>
+
           {% if project_form %}
-          <div id="project_form" class="form-container" style="display: none;">
+          <div id="project_form" class="form-container" style="display: block">
               <h3>Create New Project Record</h3>
               {{ project_form.as_p }}
           </div>
           {% endif %}
+
+
+          {% comment %} 
           {% if engineer_form %}
           <div id="engineer_form" class="form-container" style="display: none;">
               <h3>Create New Engineer</h3>
@@ -155,7 +251,8 @@
               <h3> Create New Data Collector Record</h3>
               {{ collector_form.as_p }}
           </div>
-         {% endif %}
+         {% endif %} 
+         {% endcomment %}
          
           {% comment %} <div class="row">
             {% for field in form %}
@@ -170,7 +267,7 @@
 
           </div> {% endcomment %}
           <div class="mt-3">
-            <button type="cancel" class="btn btn-primary" onclick="clearForms()" >Clear</button>
+            <button type="button" class="btn btn-primary" onclick="clearForms()" >Clear</button>
             <button type="submit" class="btn btn-success">Save Record</button>
           </div>
         </form>
@@ -269,7 +366,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="post" enctype="multipart/form-data" id="engineerForm">
+        <form method="post" enctype="multipart/form-data" id="engineerForm" action="{% url 'core:add-engineer' %}">
+        
           {% csrf_token %}
 
           {{ engineer_form.as_p }}
@@ -291,7 +389,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="post" enctype="multipart/form-data" id="dataCollectorForm">
+        <form method="post" enctype="multipart/form-data" id="dataCollectorForm" action="{% url 'core:add-collector' %}">
           {% csrf_token %}
 
           {{ collector_form.as_p }}
@@ -312,41 +410,44 @@
 <script>
 
   document.addEventListener('DOMContentLoaded', function() {
-    const selecElement = document.getElementById('projectInfo');
+    const selectElement = document.getElementById('projectInfo');
     const formContainers = document.querySelectorAll('.form-container');
 
-    selecElement.addEventListener('change', function(){
-      const selectedValue = this.value;
+    selectElement.addEventListener('change', function() {
+        const selectedValue = this.value;
 
-      // Hide all form containers first
-      // formContainers.forEach(container => {
-      //  container.style.display = "none";
-     //  });
-      // Get the base URL from the form's action attribute
-      const form = document.getElementById('projectDataTypeForm');
-      const baseUrl = form.getAttribute('action');
-
-      // show the form that matches the selected value
-      if (selectedValue) {
-        // Construct the new URL with the query parameter
-          const newUrl = `${baseUrl}?projectInfo=${selectedValue}`;
-          // Redirect the user to the new URL
-          window.location.href = newUrl;
-          /*
-        const targetFormId = selectedValue + "_form";
-        const targetForm = document.getElementById(targetFormId);
-        if (targetForm) {
-          targetForm.style.display = "block";
-        }
+        // Hide all form containers first
+        /*
+        formContainers.forEach(container => {
+            container.style.display = "none";
+        });
         */
-      }  else {
-            // Optional: Redirect to the base URL if nothing is selected
-            window.location.href = baseUrl;
+
+        // Show the selected form
+        if (selectedValue === 'project') {
+            document.getElementById('project_form').style.display = 'block';
+        } else if (selectedValue === 'engineer') {
+            document.getElementById('engineer_form').style.display = 'block';
+        } else if (selectedValue === 'collector') {
+            document.getElementById('collector_form').style.display = 'block';
         }
-    })
-  })
+    });
+});
+
+// Clear button handler
+function clearForms() {
+    document.getElementById("projectDataForm").reset();
+
+    // Also hide all subforms again
+    document.querySelectorAll('.form-container').forEach(container => {
+        container.style.display = "none";
+    });
+}
+
 
   // Function to clear all forms
+  /* 
+
   const forms = ['project_form', 'engineer_form', 'collector_form'];
   function clearForms() {
     forms.forEach(formId => {
@@ -364,44 +465,62 @@
       }
     });
 
-    // Reset the dropdown to default
-    const selectElement = document.getElementById('projectInfo');
-    if (selectElement) {
-      selectElement.value = 'null';
-    }
-  }
 
-   selectElement.addEventListener('change', function() {
+    // Reset the dropdown to default
+    const selectedElement = document.getElementById('projectInfo');
+    if (selectedElement) {
+      selectedElement.value = 'null';
+    }
+
+    selectedElement.addEventListener('change', function() {
       const selectedValue = this.value;
 
     // Get the base URL from the form's action attribute
     const form = document.getElementById('projectDataTypeForm');
     const baseUrl = form.getAttribute('action');
-   });
+   });  
+   window.location.href = baseUrl;
+  }
+
+  */
+   
+
+  
 
    
-  const ctx = document.getElementById('prjectStatusChart').getContext('2d');
-  const truckProductivityChart = new Chart(ctx, {
-    type: 'line',
+const ctx = document.getElementById('prjectStatusChart').getContext('2d');
+
+const prjectStatusChart = new Chart(ctx, {
+    type: 'bar',  // <-- change from 'line' to 'bar'
     data: {
-      labels: ['January', 'February', 'March', 'April', 'May'],
-      datasets: [{
-        label: 'Productivity',
-        data: [80, 85, 90, 95, 100],
-        borderColor: 'rgba(13, 110, 253, 1)',
-        backgroundColor: 'rgba(13, 110, 253, 0.2)',
-        fill: true
-      }]
+        labels: ['Projects', 'Engineers', 'Collectors'], // each bar represents one category
+        datasets: [{
+            label: 'Count',  // what the bars represent
+            data: [{{projects|length }}, {{engineers|length}}, {{collectors|length}}],  // replace with actual counts from Django
+            backgroundColor: [
+                'rgba(13, 110, 253, 0.7)',
+                'rgba(25, 135, 84, 0.7)',
+                'rgba(255, 193, 7, 0.7)'
+            ],
+            borderColor: [
+                'rgba(13, 110, 253, 1)',
+                'rgba(25, 135, 84, 1)',
+                'rgba(255, 193, 7, 1)'
+            ],
+            borderWidth: 1
+        }]
     },
     options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                precision: 0  // ensures integer ticks
+            }
         }
-      }
     }
-  });
+});
+
 </script>
 {% endblock %}
 

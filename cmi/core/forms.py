@@ -44,6 +44,7 @@ class EngineerForm(forms.ModelForm):
         model = Engineer
         fields = '__all__'
         labels = {
+            'projects': 'Projects',
             'fname': 'First Name',
             'mname': 'Middle Name',
             'lname': 'Last Name', 
@@ -51,6 +52,7 @@ class EngineerForm(forms.ModelForm):
             'email': 'Email Address',
         }
         widgets = {
+            'projects': forms.CheckboxSelectMultiple(attrs={'class': 'form-check'}),
             'fname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             'mname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Middle Name'}),
             'lname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
@@ -117,19 +119,27 @@ class DataInstanceForm(forms.ModelForm):
             # 'task': 'Task',
             # 'element': 'Element',
             'particular': 'Particular',
-            'problems': 'Problems',
             'status': 'Status',
             'encoded': 'Encoded',
-            'encoder': 'Data Encoder',
+            # 'encoder': 'Data Encoder',
+            'encoded_by': 'Encoded By',
+            'reviewed_by': 'Reviewed By',
+            'raw_file': 'Raw Data File',
+            'encoded_file': 'Encoded Data File',
         }
 
         widgets = {
             'project': forms.Select(attrs={'class': 'form-select'}),
-            'problems': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Review Comments'}),
             'collector': forms.Select(attrs={'class': 'form-select'}),
             'particular': forms.Select(attrs={'class': 'form-select'}),
-            'status': forms.RadioSelect(),
-            'encoded': forms.CheckboxInput(attrs={'class': 'form-control'}),
+            'status': forms.RadioSelect(attrs={'class': 'form-check-inline'}),
+            'encoded': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            # 'encoder': forms.Select(attrs={'class': 'form-select'}),
+            'encoded_by': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Encoded By'}),
+            'review_comments': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Review Comments'}),
+            'reviewed_by': forms.Select(attrs={'class': 'form-select', 'placeholder': 'Reviewed By'}),
+            'raw_file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'encoded_file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
     
 
@@ -138,7 +148,7 @@ class DataCollectorForm(forms.ModelForm):
         model = Collector
         fields = '__all__'
         labels = {
-            'project': 'Project',
+            'projects': 'Projects',
             'engineer': 'Engineer',
             'fname': 'First Name',
             'mname': 'Middle Name',
@@ -146,7 +156,7 @@ class DataCollectorForm(forms.ModelForm):
             'phone': 'Phone Number',
         }
         widgets = {
-            'project': forms.Select(attrs={'class': 'form-select'}),
+            'projects': forms.CheckboxSelectMultiple(attrs={'class': 'form-check'}),
             'engineer': forms.Select(attrs={'class': 'form-select'}),
             'fname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
             'mname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Middle Name'}),

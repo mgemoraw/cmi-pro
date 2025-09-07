@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
+from django.db.models import Count
+
 from .forms import TipperDataModelForm, ProjectForm, DataInstanceForm,DataCollectorForm, EngineerForm
 from particular.forms import ParticularForm
 from .models import (
@@ -60,11 +62,23 @@ def instance_dashboard(request):
     # active_particulars = DataInstance.objects.distinct(particular)
     context = {
         'instances': instances,
-        "form": instance_form,
+        "instance_form": instance_form,
     }
     return render(request, 'core/instance_dashboard.html', context=context)
 
 def create_instance_view(request):
+    if request.method == "POST":
+        instance_form = DataInstanceForm(request.POST, request.FILES)
+        instance_raw_data=request.FILES.get('raw_file')
+        instance_encoded_data=request.FILES.get('encoded_file')
+        parser = InstanceDataParser(data_file=instance_raw_data, encoded_file=instance_encoded_data)
+        parsed_data = parser.parse()
+        
+        if instance_form.is_valid():
+            instance_form.save()
+            messages.success(request, "Data Instance created successfully.")
+        else:
+            messages.error(request, "Error creating Data Instance. Please check the form.")
     return redirect('core:instances')
 
 def import_instances(request):
@@ -101,6 +115,8 @@ def trucks(request):
 
 def projects(request):
     projects = Project.objects.all()
+    # projects = Project.objects.annotate(data_collectors=Count("collectors"))
+
     engineers = Engineer.objects.all()
     collectors = Collector.objects.all()
     project_form = ProjectForm()
@@ -111,7 +127,9 @@ def projects(request):
         "projects": projects,
         'engineers': engineers,
         'collectors': collectors,
-        
+        'collector_form': collector_form,
+        'project_form': project_form,
+        'engineer_form': engineer_form,
     }
 
     if request.method == "GET":
@@ -120,8 +138,35 @@ def projects(request):
         context[label] = selected_type
     return render(request, 'core/projects.html', context=context)
 
-def create_project(request):
+
+def create_project(request, slug=None):
     projects = Project.objects.all()
+    project_form = ProjectForm()
+    engineer_form = EngineerForm()
+    modal_open = False
+    context = {
+        'projects': projects,
+        'modal_open': modal_open,
+    }
+
+    # if request.method == 'GET':
+    #     form_type = request.GET.get('projectInfo')
+    #     # print(form_type)
+    #     if form_type == 'project':
+    #         project_form = ProjectForm()
+    #         context['project_form'] = project_form
+    #         return render(request, 'core/projects.html', context)
+    #     elif form_type == 'engineer':
+    #         engineer_form = EngineerForm()
+    #         context['engineer_form'] = engineer_form
+    #         return render(request, 'core:projects', context)
+    #     elif form_type == 'collector':
+    #         collector_form = DataCollectorForm()
+    #         context['collector_form'] = collector_form
+    #         return render(request, 'core:projects', context)
+        
+    #     return redirect('core:projects', )
+    
     if request.method == 'POST':
         form_type = request.POST.get('projectInfo')
         if form_type =='project':
@@ -141,16 +186,7 @@ def create_project(request):
                 collector_form.save()
                 return redirect("core:projects")
     else:
-        project_form = ProjectForm()
-        engineer_form = EngineerForm()
-        collector_form = DataCollectorForm()
-   
-        context = {
-            'projects': projects,
-            'project_form': project_form,
-            'engineer_form': engineer_form,
-            'collector_form': collector_form,
-        }
+        # messages.error(request, "Invalid form submission.")       
         return render(request, 'core/projects.html', context)
 
 def download_template(request):
@@ -225,28 +261,28 @@ def import_project_data(request):
         
     return render(request, 'core/projects.html', context)
 
+def add_engineer(request):
+    if request.method == 'POST':
+        engineer_form = EngineerForm(request.POST)
+        if engineer_form.is_valid():
+            engineer_form.save()
+            messages.success(request, "Engineer added successfully.")
+            return redirect('core:projects')
+        else:
+            messages.error(request, "Error adding engineer. Please check the form.")
+    return redirect('core:projects')
 
 def add_collector(request):
     if request.method == 'POST':
-        fname = request.POST.get('fname')
-        mname = request.POST.get('mname')
-        lname = request.POST.get('lname')
-        phone = request.POST.get('phone')
-        project_id = request.POST.get('project')
-        engineer_id = request.POST.get('engineer')
-        project = Project.objects.get(id=project_id)
-        engineer = None
-        if engineer_id:
-            engineer = Engineer.objects.get(id=engineer_id)
-        Collector.objects.create(
-            fname=fname,
-            mname=mname,
-            lname=lname,
-            phone=phone,
-            project=project,
-            engineer=engineer
-        )
+        collector_form = DataCollectorForm(request.POST)
+        if collector_form.is_valid():
+            collector_form.save()
+            messages.success(request, "Data Collector added successfully.")
+            return redirect('core:projects')
+        else:
+            messages.error(request, "Error adding data collector. Please check the form.")
         return redirect('core:projects')
+    
     return redirect('core:projects')
 
 

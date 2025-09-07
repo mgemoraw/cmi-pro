@@ -38,7 +38,7 @@ class WorkEquipment(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     unit = models.CharField(max_length=50, null=True)
-    count = models.PositiveIntegerField(default=0)
+    count = models.PositiveIntegerField(default=1)
 
     def save(self, *args, **kwargs):
         if self.pk is None: # only when creating a new equipment

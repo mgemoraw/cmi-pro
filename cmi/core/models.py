@@ -1,6 +1,6 @@
 from django.db import models
 # from django.contrib.gis.db import models as gis_models  # Only if using GeoDjango
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Project(models.Model):
@@ -27,20 +27,22 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class Engineer(models.Model):
+    projects = models.ManyToManyField("Project", related_name="engineers")
     fname = models.CharField(max_length=255)
     mname = models.CharField(max_length=255)
     lname = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
-    email = models.CharField(max_length=255)
+    email = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return "{} {}".format(self.fname, self.mname)
+        return f"{self.fname} {self.mname} {self.lname}"
 
 
 class Collector(models.Model):
-    project = models.ForeignKey("Project", verbose_name=("_"), on_delete=models.CASCADE)
+    projects = models.ManyToManyField("Project", related_name="collectors")
     engineer = models.ForeignKey('Engineer', on_delete=models.PROTECT, null=True)
     fname = models.CharField(max_length=100)
     mname = models.CharField(max_length=100)
@@ -48,7 +50,7 @@ class Collector(models.Model):
     phone = models.CharField(max_length=15, unique=True)
     
     def __str__(self):
-        return "{self.fname} {self.mname}"
+        return f"{self.fname} {self.mname}"
 
 
 
@@ -232,6 +234,14 @@ class TipperDataModel(models.Model):
         return f"{self.project.name} - {self.date} - {self.tipper.license_plate}"
     
 
+
+def instance_raw_file_path(instance, filename):
+    return f"instances/{instance.particular.pid}/raw/{filename}"
+
+def instance_encoded_file_path(instance, filename):
+    return f"instances/{instance.particular.pid}/encoded/{filename}"
+
+
 class DataInstance(models.Model):
     from particular.models import Particular
 
@@ -245,8 +255,13 @@ class DataInstance(models.Model):
     
     particular = models.ForeignKey(Particular, on_delete=models.CASCADE, related_name='instance_particular')
     date = models.DateField(auto_now_add=True)
-    
-    problems = models.TextField()
+
     status = models.CharField(max_length=15, choices=InstanceChoices, default=InstanceChoices.PENDING)
     encoded = models.BooleanField(default=False)
-    encoder = models.CharField(max_length=255)
+    # encoder = models.CharField(max_length=255)
+    encoded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='encoder')
+    review_comments = models.TextField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviewer')
+
+    raw_file = models.FileField(upload_to=instance_raw_file_path, null=True, blank=True)
+    encoded_file = models.FileField(upload_to=instance_encoded_file_path, null=True, blank=True)
