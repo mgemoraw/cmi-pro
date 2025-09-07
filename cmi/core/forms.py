@@ -1,5 +1,5 @@
 from django import forms
-from .models import TipperDataModel, Project, DataInstance, Task, Tipper, Collector, TipperCycle, Engineer
+from .models import TipperDataModel, Project, DataInstance, Task, Tipper, Collector, Engineer
 
 class TipperDataModelForm(forms.ModelForm):
     class Meta:
