@@ -347,7 +347,7 @@ class DailyVariables(BaseForm):
     use_of_overtime = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-class MPDMForm(BaseForm):
+class MPDM(BaseForm):
     # equipment = models.ForeignKey()
     cycle_number = models.PositiveIntegerField()
     cycle_time = models.PositiveIntegerField()
@@ -359,8 +359,8 @@ class MPDMForm(BaseForm):
     other_delay = models.IntegerField()
     other_label = models.CharField(max_length=255, null=True, blank=True)
 
-    class Meta:
-        abstract = True
+    # class Meta:
+    #     abstract = True
 
 
 class Tipper(EquipmentBaseForm):

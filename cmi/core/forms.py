@@ -1,28 +1,23 @@
 from django import forms
-from .models import Tipper, Project, DataInstance, Task, Tipper, Collector, Engineer
+from .models import (
+    Tipper, 
+    Project, 
+    DataInstance, 
+    Task, 
+    Collector, 
+    Engineer,
+    MPDM,
+    Tipper,
+    Excavator,
+    Dozer,
+    LaborCrew,
+    WorkSampling,
+    DailyVariables,
+    ProblemCode,
+)
 
-class TipperDataModelForm(forms.ModelForm):
-    class Meta:
-        model = Tipper
-        fields = '__all__'
-        labels = {
-            'project': 'Project',
-            'date': 'Date',
-            'number_of_equipment_types': 'Number of Equipment Types',
-            'task': 'Task',
-            'collector': 'Collector',
-            'tipper': 'Tipper',
-            'cyles': 'Cycle',
-        }
-        widgets = {
-            'project': forms.Select(attrs={'class': 'form-select'}),
-            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'number_of_equipment_types': forms.NumberInput(attrs={'class': 'form-control'}),
-            'task': forms.Select(attrs={'class': 'form-select'}),
-            'collector': forms.Select(attrs={'class': 'form-select'}),
-            'tipper': forms.Select(attrs={'class': 'form-select'}),
-            'cyles': forms.Select(attrs={'class': 'form-select'}),
-        }
+
+# form models for database models
 
 
 # class TipperDataModelForm(forms.ModelForm):
@@ -164,3 +159,48 @@ class DataCollectorForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
         }
 
+class MPDMForm(forms.ModelForm):
+    class Meta:
+        model = MPDM
+        fields = (
+            'date', 
+            'operation', 
+            'particular', 
+            'cycle_number',
+            'cycle_time',
+            'environment_delay',
+            'equipment_delay',
+            'labor_delay',
+            'material_delay',
+            'management_delay',
+            'other_delay',
+            'other_label',
+        )
+
+        labels = {}
+        widgets = {}
+
+
+
+class TipperDataModelForm(forms.ModelForm):
+    class Meta:
+        model = Tipper
+        fields = '__all__'
+        labels = {
+            'project': 'Project',
+            'date': 'Date',
+            'number_of_equipment_types': 'Number of Equipment Types',
+            'task': 'Task',
+            'collector': 'Collector',
+            'tipper': 'Tipper',
+            'cyles': 'Cycle',
+        }
+        widgets = {
+            'project': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'number_of_equipment_types': forms.NumberInput(attrs={'class': 'form-control'}),
+            'task': forms.Select(attrs={'class': 'form-select'}),
+            'collector': forms.Select(attrs={'class': 'form-select'}),
+            'tipper': forms.Select(attrs={'class': 'form-select'}),
+            'cyles': forms.Select(attrs={'class': 'form-select'}),
+        }
