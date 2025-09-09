@@ -1,10 +1,9 @@
 from django.contrib import admin
-from .models import Project, Collector, TipperDataModel, Engineer, DataInstance
+from .models import Project, Collector, Engineer, DataInstance
 
 
 # Register your models here.
 # admin.site.register(Collector)
-admin.site.register(TipperDataModel)
 # admin.site.register(Engineer)
 
 

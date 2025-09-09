@@ -65,9 +65,9 @@ class Productivity(models.Model):
     collector = models.ForeignKey("Collector", on_delete=models.CASCADE)
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
     particular = models.ForeignKey('particular.Particular', on_delete=models.CASCADE)
-    date = models.DateField()
-    unit = models.CharField(max_length=255)
-    # instances = models.PositiveIntegerField(default=0)
+    date = models.DateField(null=True, blank=True)
+    unit = models.CharField(max_length=100, null=True, blank=True)
+    instance = models.ForeignKey('DataInstance', on_delete=models.CASCADE, null=True, blank=True)
     value = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
     # mpdm_delay = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
     # mpdm_code = models.CharField(max_length=100, null=True, blank=True)
@@ -76,7 +76,7 @@ class Productivity(models.Model):
 class BaseForm(models.Model):
     particular = models.ForeignKey('particular.Particular', on_delete=models.CASCADE)
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(null=True, blank=True)
     submitted_by = models.ForeignKey('Collector', on_delete=models.SET_NULL, null=True)
     encoded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     data_count = models.PositiveIntegerField(default=0)
@@ -93,15 +93,23 @@ class BaseForm(models.Model):
         abstract = True
 
 
+class Equipment(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
 class EquipmentBaseForm(models.Model):
-    date = models.DateField()
-    particular = models.ForeignKey('particular.Particular', on_delete=models.CASCADE)
-    project = models.ForeignKey('Project', on_delete=models.CASCADE)
+    date = models.DateField(null=True, blank=True)
+    particular = models.ForeignKey('particular.Particular', on_delete=models.CASCADE, null=True, blank=True)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, null=True, blank=True)
     submitted_by = models.ForeignKey('Collector', on_delete=models.SET_NULL, null=True)
-    # equipment = models.ForeignKey('WorkEquipment', on_delete=models.CASCADE)
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, blank=True, null=True)
     equipment = models.CharField(max_length=255, null=True, blank=True)
-    equipment_tag = models.CharField(max_length=100)
-    manpower = models.TextField()
+    equipment_tag = models.CharField(max_length=100, null=True, blank=True)
+    manpower = models.TextField(null=True, blank=True)
 
     encoded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     data_count = models.PositiveIntegerField(default=0)
@@ -109,12 +117,12 @@ class EquipmentBaseForm(models.Model):
 
     time_unit = models.CharField(max_length=20, null=True, blank=True)
     task_type = models.CharField(max_length=255, null=True, blank=True)
-    task_description = models.TextField()
-    soil_type = models.CharField(max_length=255)
+    task_description = models.TextField(null=True, blank=True)
+    soil_type = models.CharField(max_length=255, null=True, blank=True)
     operation = models.CharField(max_length=255, null=True, blank=True)
 
     # productivity
-    productivity = models.DecimalField(max_digits=6, decimal_places=2)
+    productivity = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
     # mpdm form
     environment_delay = models.IntegerField(default=0)
@@ -127,7 +135,6 @@ class EquipmentBaseForm(models.Model):
 
     class Meta:
         abstract = True
-
 
 class Excavator(EquipmentBaseForm):
     excavator_type = models.CharField(max_length=20)
@@ -178,20 +185,49 @@ class Dozer(EquipmentBaseForm):
         
         super().save(*args, **kwargs)
 
+
+class ProblemCode(models.Model):
+    category = models.CharField(max_length=100)
+    code = models.CharField(max_length=10, unique=True)
+    description = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.code} - {self.description}"
+
+
 class LaborCrew(BaseForm):
     location = models.CharField(max_length=255, null=True)
     crew_size = models.PositiveIntegerField()
+    crew_composition = models.TextField()
+
+    # manhours
     work_hours = models.FloatField(default=8)
-    overtime_hours = models.FloatField(default=0)
-    total_hours = models.DecimalField(max_digits=6, decimal_places=2)
+    ot_work_hours = models.FloatField(default=0)
+    total_work_hours = models.FloatField(default=0)
     total_manhours = models.DecimalField(max_digits=6, decimal_places=2)
     unit = models.CharField(max_length=20)
     daily_units_completed = models.CharField(max_length=255)
-    # weight of task
-    # level of effort
-    # completed unit =  daily_units_completed * weight_of task * level of effort
-    # productivity =  installed quantity / total manhours
-    # problem codes
+    task_weight = models.DecimalField(max_digits=6, decimal_places=2)
+    effort_level = models.DecimalField(max_digits=6, decimal_places=2)
+    completed_unit = models.DecimalField(max_digits=6, decimal_places=2)
+    
+    problem_codes = models.ManyToManyField('ProblemCode')
+
+
+    def save(self, *args, **kwargs):
+        try:
+            self.total_manhours = self.work_hours + self.ot_work_hours
+            self.total_manhours = self.total_work_hours * self.crew_size
+            self.completed_unit = self.daily_units_completed * self.task_weight*self.effort_level
+
+            self.completed_unit = self.daily_units_completed * self.task_weight * self.effort_level
+            self.productivity = self.completed_unit / self.total_manhours
+
+        except Exception as e:
+            raise e
+            self.completed_unit = 0
+
+        super().save(*args, **kwargs)
 
 
 class WorkSampling(BaseForm):
@@ -211,8 +247,11 @@ class WorkSampling(BaseForm):
     comments = models.TextField()
 
     def save(self, *args, **kwargs):
-        self.total = self.direct + self.preparatory + self.tools_and_equipment + self.material_handling + self.waiting + self.travel + self.personal
-
+        try:
+            self.total = self.direct + self.preparatory + self.tools_and_equipment + self.material_handling + self.waiting + self.travel + self.personal
+        except Exception as e:
+            raise e
+        
         super().save(*args, **kwargs)
     
 
@@ -308,7 +347,7 @@ class DailyVariables(BaseForm):
     use_of_overtime = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-class MPDM(BaseForm):
+class MPDMForm(BaseForm):
     # equipment = models.ForeignKey()
     cycle_number = models.PositiveIntegerField()
     cycle_time = models.PositiveIntegerField()
@@ -320,31 +359,34 @@ class MPDM(BaseForm):
     other_delay = models.IntegerField()
     other_label = models.CharField(max_length=255, null=True, blank=True)
 
+    class Meta:
+        abstract = True
+
 
 class Tipper(EquipmentBaseForm):
-    truck_license_plate = models.CharField(max_length=20)
-    load_cyle = models.PositiveIntegerField()
-    haul_cyle = models.PositiveIntegerField()
-    dump_cycle = models.PositiveIntegerField()
-    return_cyle = models.PositiveIntegerField()
-    total_cycle = models.PositiveIntegerField()
-    q_heaped_bucket_capacity = models.DecimalField(max_digits=6, decimal_places=2)
+    cycle_number = models.PositiveIntegerField(default=1)
+    truck_license_plate = models.CharField(max_length=20, null=True, blank=True)
+    load_cyle = models.PositiveIntegerField(null=True)
+    haul_cyle = models.PositiveIntegerField(null=True)
+    dump_cycle = models.PositiveIntegerField(null=True)
+    return_cyle = models.PositiveIntegerField(null=True)
+    total_cycle = models.PositiveIntegerField(default=0)
+    heaped_bucket_capacity = models.DecimalField(max_digits=6, decimal_places=2, default=0)
    
 
     def save(self, *args, **kwargs):
         # Ensure total_cycle is the sum of all cycles
         if self.time_unit.lower().startswith('minute'):
-            self.productivity = (self.q_heaped_capacity) / (self.total_cycle * 60)
+            self.productivity = (self.heaped_bucket_capacity) / (self.total_cycle * 60)
         elif self.time_unit.lower().startswith('second'):
-            self.productivity = (self.q_heaped_capacity) / (self.total_cycle)
+            self.productivity = (self.heaped_bucket_capacity) / (self.total_cycle)
         else:
-            raise Exception(f"Can't compute productivity with this value of capacity: {self.q_heaped_bucket_capacity} and cycle time of {self.total_cycle} ")
+            raise Exception(f"Can't compute productivity with this value of capacity: {self.heaped_bucket_capacity} and cycle time of {self.total_cycle} ")
         super().save(*args, **kwargs)
     
 
     def __str__(self):
-        return f"Cycle {self.cycle_number} - {self.soil_type} - {self.total_cycle} {self.unit}"
-
+        return f"Cycle {self.cycle_number} - {self.soil_type} - {self.total_cycle} {self.time_unit}"
 
 
 class FormType(models.Model):
@@ -360,8 +402,8 @@ class FormType(models.Model):
     ]
 
     form_name = models.CharField(max_length=100, unique=True, choices=FormTypeChoices,)
-    particular = models.ForeignKey('Particular', on_delete=models.CASCADE, related_name='particular_forms')
-    equipment = models.ForeignKey('WorkEquipment', on_delete=models.CASCADE, related_name='work_equipment_forms', null=True, blank=True)
+    particular = models.ForeignKey('particular.Particular', on_delete=models.CASCADE, related_name='particular_forms')
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='work_equipment_forms', null=True, blank=True)
     description = models.TextField(blank=True)
     # file = models.FileField(upload_to='particular_forms/')
     created_at = models.DateTimeField(auto_now_add=True)

@@ -15,8 +15,6 @@ from .models import (
     DataInstance,
     Engineer,
     Task,
-    TipperCycle,
-    TipperDataModel,
 )
 from particular.models import Particular
 from .services import  ProjectDataParser, ProjectDataTemplateGenerator

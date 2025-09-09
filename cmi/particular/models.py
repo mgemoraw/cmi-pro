@@ -36,7 +36,7 @@ class Division(models.Model):
 
 class WorkEquipment(models.Model):
     name = models.CharField(max_length=255)
-    equipment_type = models.CharField(max_length=100)
+    equipment_type = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField()
     unit = models.CharField(max_length=50, null=True)
     count = models.PositiveIntegerField(default=1)

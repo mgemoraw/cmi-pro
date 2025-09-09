@@ -1,9 +1,9 @@
 from django import forms
-from .models import TipperDataModel, Project, DataInstance, Task, Tipper, Collector, Engineer
+from .models import Tipper, Project, DataInstance, Task, Tipper, Collector, Engineer
 
 class TipperDataModelForm(forms.ModelForm):
     class Meta:
-        model = TipperDataModel
+        model = Tipper
         fields = '__all__'
         labels = {
             'project': 'Project',
