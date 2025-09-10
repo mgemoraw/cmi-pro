@@ -1,0 +1,119 @@
+No;PID;subsector;division;task;element;particular
+1;P001;Dam;1;Earth;Clearing and garbling ;Using Dozers
+2;P002;Dam;1;Earth;Clearing and garbling ;Using Motor Graders  
+3;P003;Dam;1;Earth;Clearing and garbling ;labours 
+4;P004;Dam;1;Earth;Excavation ;Using Dozers
+5;P005;Dam;1;Earth;Excavation ;Hydraulic Excavator
+6;P006;Dam;1;Earth;Mixing ;Using Dozers
+7;P007;Dam;1;Earth;Mixing ;Hydraulic Excavator
+8;P008;Dam;1;Earth;Transportation  ;Tippers with Loader
+9;P009;Dam;1;Earth;Transportation  ;Tippers with Excavator
+10;P010;Dam;1;Earth;Transportation  ;Tippers with Backhoe Excavator
+11;P011;Dam;1;Rock;Soft rock Excavation;Dozer with ripper
+12;P012;Dam;1;Rock;Soft rock Excavation;Hydraulic Excavator
+13;P013;Dam;1;Rock;Hard rock Excavation;Hydraulic Excavator with Jack-Hammer and Rock Bucket
+14;P014;Dam;1;Rock;Hard rock Excavation;Drilling machines with controlled Blasting 
+15;P015;Dam;1;Rock;Hard rock Excavation;Pneumatic Hammers
+16;P016;Dam;1;Rock;Aggregate production;Tipper and Hydraulic Excavator with Crushing plant
+17;P017;Dam;1;Rock;Aggregate production;Tipper, Hydraulic Excavator and labor with crushing plant
+18;P018;Dam;1;Rock;Transportation;Tipper and Hydraulic Excavator
+19;P019;Dam;1;Rock;Transportation;Tipper and Loader
+20;P020;Dam;1;Roller-compacted concrete (RCC);Mixing;RCC Dam Batching Plant
+21;P021;Dam;1;Roller-compacted concrete (RCC);Transportation;Conveyor and Vehicle(Tippers)
+22;P022;Dam;1;Roller-compacted concrete (RCC);Transportation;Conveyor
+23;P023;Dam;1;Roller-compacted concrete (RCC);Transportation;Buckets
+24;P024;Dam;2;Excavation on Earth;     Foundation;Dozer
+25;P025;Dam;2;Excavation on Earth;     Foundation;Hydraulic Excavator
+26;P026;Dam;2;Excavation on Earth;Abutment;Dozer
+27;P027;Dam;2;Excavation on Earth;Abutment;Hydraulic Excavator
+28;P028;Dam;2;Excavation on Soft Rock;Foundation;Dozer with ripper
+29;P029;Dam;2;Excavation on Soft Rock;Foundation;Hydraulic Excavator
+30;P030;Dam;2;Excavation on Soft Rock;Abutment;Dozer with ripper
+31;P031;Dam;2;Excavation on Soft Rock;Abutment;Hydraulic Excavator
+32;P032;Dam;2;Excavation on Hard Rock;Foundation;Hydraulic Excavator with Jack-Hammer and Rock Bucket
+33;P033;Dam;2;Excavation on Hard Rock;Foundation;Drilling machines, controlled Blasting and Hydraulic Excavator with Rock Bucket
+34;P034;Dam;2;Excavation on Hard Rock;Foundation;Pneumatic Hammers and Hydraulic Excavator with Rock Bucket
+35;P035;Dam;2;Excavation on Hard Rock;Abutment;Hydraulic Excavator with Jack-Hammer and Rock Bucket
+36;P036;Dam;2;Excavation on Hard Rock;Abutment;Drilling machines, controlled Blasting and Hydraulic Excavator with Rock Bucket
+37;P037;Dam;2;Excavation on Hard Rock;Abutment;Pneumatic Hammers and Hydraulic Excavator with Rock Bucket
+38;P038;Dam;2;Consolidating(Contact Grouting) at Dam Sit;Drilling;Drilling Rig
+39;P039;Dam;2;Consolidating(Contact Grouting) at Dam Sit;Grouting;Grout plant (mixer and agitator and pump all in one)
+40;P040;Dam;2;Consolidating(Contact Grouting) at Dam Sit;Grouting;Using separate equipment's combined (grout mixer, or grout agitator, or grout mixer and agitator, or grout pump)
+41;P041;Dam;2;Curtain Grouting at Dam Sit;Drilling;Drilling Rig
+42;P042;Dam;2;Curtain Grouting at Dam Sit;Grouting;Grout plant (mixer and agitator and pump all in one)
+43;P043;Dam;2;Curtain Grouting at Dam Sit;Grouting;Using separate equipment’s combined (grout mixer, or grout agitator, or grout mixer and agitator, or grout pump)
+44;P044;Dam;2;Curtain Grouting at abutments;Drilling;Drilling Rig
+45;P045;Dam;2;Curtain Grouting at abutments;Grouting;Grout plant (mixer and agitator and pump all in one)
+46;P046;Dam;2;Curtain Grouting at abutments;Grouting;Using separate equipment's combined (grout mixer, or grout agitator, or grout mixer and agitator, or grout pump)
+47;P047;Dam;3;Zoned Rock Fill dam;Impervious Clay core;Motor Grader, Sheep Foot and Smooth drum vibratory roller
+48;P048;Dam;3;Zoned Rock Fill dam;Rockfill Shell at flanks of core;Dozer, Sheep Foot and Smooth drum vibratory roller
+49;P049;Dam;3;Zoned earth dam;Impervious Clay core;Motor Grader, Sheep Foot and Smooth drum vibratory roller
+50;P050;Dam;3;Zoned earth dam;Shell;Motor Grader, Sheep Foot and Smooth drum vibratory roller
+51;P051;Dam;3;Zoned earth dam;Rip-rap;Hydraulic Excavator
+52;P052;Dam;3;Diaphragm type Rock Fill dam;Asphalt Concrete Cores;Asphalt Concrete Cores
+53;P053;Dam;3;Diaphragm type Rock Fill dam;Rockfill Shell at flanks of core;Dozer, Smooth drum vibratory roller
+54;P054;Dam;3;   Homogeneous RCC dam;Roller compacted concrete;Bull Dozers, asphalt pavers and vibratory rollers
+55;P055;Dam;4;Excavation;All Types of Soil;The values of data from the Dam foundation can be adopted, to optimize resource
+56;P056;Dam;4;Curtain grouting;All Types;All Types
+57;P057;Dam;4;Spillway Wall;Concrete;All type methods
+58;P058;Dam;4;Spillway Wall;Masonry;All type methods
+59;P059;Dam;5;Excavation;All Types of Soil;The values of data from the Dam foundation can be adopted, to optimize resource
+60;P060;Dam;5;Curtain grouting;All Types;All Types
+61;P061;Dam;5;Weir Wall;Concrete;All type methods
+62;P062;Dam;5;Weir Wall;Masonry;All type methods
+63;P063;Dam;5;Weir Wall;Cyclopean Concrete;All type methods
+64;P064;Dam;6;Hauling away and disposing;Hauling;Tippers with Loader
+65;P065;Dam;6;Hauling away and disposing;Spreading;Motor Grader
+66;P066;Irrigation;5;Earth;Clearing ;Dozers
+67;P067;Irrigation;5;Earth;Clearing ;Motor Graders  
+68;P068;Irrigation;5;Earth;Clearing ;labours 
+69;P069;Irrigation;5;Earth;Excavation;Dozers
+70;P070;Irrigation;5;Earth;Excavation;Hydraulic Excavator
+71;P071;Irrigation;5;Earth;Mixing ;Dozers
+72;P072;Irrigation;5;Earth;Mixing ;Hydraulic Excavator
+73;P073;Irrigation;5;Earth;Transportation  ;Tippers with Loader
+74;P074;Irrigation;5;Earth;Transportation  ;Tippers with Excavator
+75;P075;Irrigation;5;Earth;Transportation  ;Tippers with Backhoe Excavator
+76;P076;Irrigation;6;Foundation Preparation;Site Clearing;Dozers
+77;P077;Irrigation;6;Foundation Preparation;Site Clearing;Motor Graders
+78;P078;Irrigation;6;Foundation Preparation;Site Clearing;labours
+79;P079;Irrigation;6;Foundation Preparation;Stripping;Dozers
+80;P080;Irrigation;6;Foundation Preparation;Stripping;Motor Graders
+81;P081;Irrigation;6;Foundation Preparation;Heavy Reshape and Compaction;Motor Graders, Sheep Foot and Smooth drum vibratory roller, and Water Truck
+82;P082;Irrigation;7;Embankment;Impervious Clay ;Motor Grader, Sheep Foot and Smooth drum vibratory roller
+83;P083;Irrigation;7;Embankment;Top Gravel wearing course;Motor Grader, Smooth drum vibratory roller
+84;P084;Irrigation;8;Canal Section Opening ;In Soft Material ;Motor Grader with labors 
+85;P085;Irrigation;8;Canal Section Opening ;In Soft Material ;Excavator with labors
+86;P086;Irrigation;8;Canal Section Opening ;In Soft Material ;Labours only
+87;P087;Irrigation;8;Canal Section Opening ;In Fill material;Motor Grader with labours 
+88;P088;Irrigation;8;Canal Section Opening ;In Fill material;Excavator with labours
+89;P089;Irrigation;8;Canal Section Opening ;In Fill material;Labours only
+90;P090;Irrigation;8;Lining  ;Concrete;Stationary mixer with labours
+91;P091;Irrigation;8;Lining  ;Concrete;Track mixer with labours
+92;P092;Irrigation;8;Lining  ;Geotextile membrane;Welding machine with Labours
+93;P093;Irrigation;9;Turnout  ;Turnout;All types
+94;P094;Irrigation;9;Drop Structures ;All;All types
+95;P095;Irrigation;10;Hauling away and disposing;All;The values of data from the Dam Division can be adopted, to optimize resource
+96;P096;WaterSupply;11;Excavation true to line and grade ;In Earth  ;Labour force 
+97;P097;WaterSupply;11;Excavation true to line and grade ;In Earth  ;Backhoe (Excavator) and Labour force
+98;P098;WaterSupply;11;Excavation true to line and grade ;In Soft Rock ;Hydraulic Excavator and Labour force
+99;P099;WaterSupply;11;Excavation true to line and grade ;In Hard Rock ;Hydraulic Excavator and Labour force
+100;P100;WaterSupply;11;Pipe Laying ;DCI;All Types of size and method of laying
+101;P101;WaterSupply;11;Pipe Laying ;UPVC;All Types of size and method of laying
+102;P102;WaterSupply;11;Pipe Laying ;HDPE;All Types of size and method of laying
+103;P103;WaterSupply;11;Pipe Connection(Jointing);DCI;All Types of size and method of connection
+104;P104;WaterSupply;11;Pipe Connection(Jointing);UPVC;All Types of size and method of connection
+105;P105;WaterSupply;11;Pipe Connection(Jointing);HDPE;All Types of size and method of connection
+106;P106;WaterSupply;11;Back filling the trenches;For All types of Pipes;Backhoe, Plate Compactor with Labours 
+107;P107;WaterSupply;12;Aerator ;Cascade Type;All
+108;P108;WaterSupply;12;Aerator ;Others;All
+109;P109;WaterSupply;12;Flash Mixing Tank;All type;All
+110;P110;WaterSupply;12;Flocculation Tank;All type;All
+111;P111;WaterSupply;12;Clarifier (Conventional);All type;All
+112;P112;WaterSupply;12;Rapid Gravity Sand Filter;All type;All
+113;P113;WaterSupply;12;Chlorine Contact Tank;All type;All
+114;P114;WaterSupply;13;Excavation;Excavation;All types of soil and as per depth of excavation
+115;P115;WaterSupply;13;Concrete;Formwork;For All types of material and method
+116;P116;WaterSupply;13;Concrete;Reinforcement;For All types of bar size
+117;P117;WaterSupply;13;Concrete;Concrete casting;For All types of method 
+118;P118;WaterSupply;13;Back fill with selected material;Concrete casting;Around foundation 
