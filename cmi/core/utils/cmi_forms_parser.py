@@ -15,6 +15,10 @@ class LaborFormParser:
             print(f"Error: Sheet '{e.args[0]}' not found in the workbook.")
             # Handle the error or re-raise
             raise
+        
+    def save(self, obj):
+        pass
+
 
     def parse(self):
         """
@@ -36,17 +40,22 @@ class LaborFormParser:
             return None
 
         # Headers are on row 17, and data starts on row 18
-        data_start_row = 5
+        data_start_row = 8
         data = []
+        # for col in self.labor_ws.iter_cols(min_row=6, max_col=10, max_row=7):
+        #     for cell in col:
+        #         print(f"{cell}: {cell.value}")
+
 
         # Iterate over rows starting from the data_start_row
         for row in self.labor_ws.iter_rows(min_row=data_start_row, values_only=True):
             # Check if the row is empty (based on a key column like 'Date')
             if not row[1]:
-                print("No rows")
+                # print("No rows")
                 continue
             
             row_data = {
+                'Data Count': row[0],
                 'Date': row[1],
                 'Project Code': row[2],
                 'Data Collector': row[3],
@@ -120,7 +129,7 @@ if __name__ == '__main__':
         parser = LaborFormParser('labor_records.xlsx')
         parsed_results = parser.parse()
         print(parsed_results.get('labour_data'))
-        print(parsed_results.get('work_sampling_data'))
+        # print(parsed_results.get('work_sampling_data'))
         # print(parsed_results.get('daily_variables_data'))
         # You can now print the results to verify
         # for sheet_name, data in parsed_results.items():
