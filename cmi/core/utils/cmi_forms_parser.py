@@ -1,5 +1,4 @@
 from openpyxl import load_workbook
-from openpyxl.utils import get_column_letter, get_column_interval
 
 class LaborFormParser:
     def __init__(self, file):
@@ -88,50 +87,8 @@ class LaborFormParser:
         # The data structure is complex, with observation numbers across two sections.
         # We need to find all rows containing 'Sum'
         sums_data = []
-
-        observations = []
-        counter = 0
-        for r in range(12, 60, 12):
-            
-            for i in range(0, 36):
-                COL = get_column_letter(i+6)
-                # print(COL)
-                cell = f"{COL}{12+r}"
-                observation = {
-                    "observation_hour": self.ws_ws[f"{COL}{r-3}"].value,
-                    "observation": self.ws_ws[f"{COL}{10+r-12}"].value,
-                    "observation time": self.ws_ws[f"{COL}{11+r-12}"].value ,
-                    "direct": self.ws_ws[f"{COL}{12+r-12}"].value,
-                    "preparatory": self.ws_ws[f"{COL}{13+r-12}"].value, 
-                    "tools and equipment": self.ws_ws[f"{COL}{r+14-12}"].value, 
-                    "Material handling": self.ws_ws[f"{COL}{r+15-12}"].value, 
-                    "Waiting": self.ws_ws[f"{COL}{r+16-12}"].value,
-                    "Travel": self.ws_ws[f"{COL}{r+17-12}"].value,
-                    "Personal": self.ws_ws[f"{COL}{r+18-12}"].value,
-                    "sum": self.ws_ws[f'{COL}{r+19-12}'].value,
-                }
-                observations.append(observation)
-
-        for ob in observations:
-            print("\n", ob)
-
         for row in self.ws_ws.iter_rows(values_only=True):
-            """parse work sampling general data first"""
-            try:
-                cols = []
-               
-                # for cell in row:
-
-                #     if cell:
-                #         if (str(cell).lower().startswith('observation time')):
-                #             counter += 1
-                #             observations.append('observation: {}'.format(counter))
-                #             # observations
-                #         cols.append(cell)
-                # print(cols if len(cols) != 0 else "")
-            except Exception as e:
-                raise e
-             
+            # The 'Sum' label is in the first column
             if row[0] == 'Sum':
                 # The sums are in the columns starting from the 5th column
                 # The data is repeated for each crew observation
@@ -169,7 +126,7 @@ class LaborFormParser:
 if __name__ == '__main__':
     # You would replace 'labor_records.xlsx' with your actual file path
     try:
-        parser = LaborFormParser('05_05_2017_gedefaw labor_records_form.xlsx')
+        parser = LaborFormParser('labor_records.xlsx')
         parsed_results = parser.parse()
         print(parsed_results.get('work_sampling_data'))
         # print(parsed_results.get('work_sampling_data'))
