@@ -91,14 +91,27 @@ class LaborFormParser:
 
         observations = []
         counter = 0
+        data_date = self.ws_ws['C10'].value
+        location = self.ws_ws['B13'].value
+        task_type = self.ws_ws['B15'].value
+        project_code = self.ws_ws['B11'].value
+        data_collector = f"{self.ws_ws['B21'].value} {self.ws_ws['C21'].value}"
+        print("########### project ################")
+        print(f"## Project Code: {project_code}")
+        print(f"## Date: {data_date}")
+        print(f"## location: {location}")
+        print(f"## task type: {task_type}")
+        print(f"## Data collector: {data_collector}")
         for r in range(12, 60, 12):
             
             for i in range(0, 36):
                 COL = get_column_letter(i+6)
                 # print(COL)
-                cell = f"{COL}{12+r}"
+                cell = f"{COL}{r-3}"
+                observation_hour = self.ws_ws[cell].value
+
                 observation = {
-                    "observation_hour": self.ws_ws[f"{COL}{r-3}"].value,
+                    "observation_hour": observation_hour if observation_hour is not None else '',
                     "observation": self.ws_ws[f"{COL}{10+r-12}"].value,
                     "observation time": self.ws_ws[f"{COL}{11+r-12}"].value ,
                     "direct": self.ws_ws[f"{COL}{12+r-12}"].value,
