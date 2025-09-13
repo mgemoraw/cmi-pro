@@ -1,5 +1,8 @@
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter, get_column_interval
+from datetime import datetime, timedelta
+import re
+
 
 class LaborFormParser:
     def __init__(self, file):
@@ -103,27 +106,35 @@ class LaborFormParser:
         print(f"## task type: {task_type}")
         print(f"## Data collector: {data_collector}")
         for r in range(12, 60, 12):
-            
+            oh = None # instatiate observation hour to
             for i in range(0, 36):
                 COL = get_column_letter(i+6)
                 # print(COL)
                 cell = f"{COL}{r-3}"
-                observation_hour = self.ws_ws[cell].value
 
-                observation = {
-                    "observation_hour": observation_hour if observation_hour is not None else '',
-                    "observation": self.ws_ws[f"{COL}{10+r-12}"].value,
-                    "observation time": self.ws_ws[f"{COL}{11+r-12}"].value ,
-                    "direct": self.ws_ws[f"{COL}{12+r-12}"].value,
-                    "preparatory": self.ws_ws[f"{COL}{13+r-12}"].value, 
-                    "tools and equipment": self.ws_ws[f"{COL}{r+14-12}"].value, 
-                    "Material handling": self.ws_ws[f"{COL}{r+15-12}"].value, 
-                    "Waiting": self.ws_ws[f"{COL}{r+16-12}"].value,
-                    "Travel": self.ws_ws[f"{COL}{r+17-12}"].value,
-                    "Personal": self.ws_ws[f"{COL}{r+18-12}"].value,
-                    "sum": self.ws_ws[f'{COL}{r+19-12}'].value,
-                }
-                observations.append(observation)
+                # read every cell of the row that could contain the observation hour
+                observation_hour = self.ws_ws[cell].value
+                if observation_hour is not None:
+                    oh = observation_hour
+                
+                observation_minute = self.ws_ws[f"{COL}{11+r-12}"].value
+                observation_time = self._get_observation_time(oh, observation_minute)
+
+                if observation_minute is not None:
+                    observation = {
+                        "observation_hour": oh,
+                        "observation number": self.ws_ws[f"{COL}{10+r-12}"].value,
+                        "observation time": observation_time ,
+                        "direct": self.ws_ws[f"{COL}{12+r-12}"].value,
+                        "preparatory": self.ws_ws[f"{COL}{13+r-12}"].value, 
+                        "tools and equipment": self.ws_ws[f"{COL}{r+14-12}"].value, 
+                        "Material handling": self.ws_ws[f"{COL}{r+15-12}"].value, 
+                        "Waiting": self.ws_ws[f"{COL}{r+16-12}"].value,
+                        "Travel": self.ws_ws[f"{COL}{r+17-12}"].value,
+                        "Personal": self.ws_ws[f"{COL}{r+18-12}"].value,
+                        "sum": self.ws_ws[f'{COL}{r+19-12}'].value,
+                    }
+                    observations.append(observation)
 
         for ob in observations:
             print("\n", ob)
@@ -153,6 +164,33 @@ class LaborFormParser:
                     sums_data.append(sums)
         
         return sums_data
+
+    def _get_observation_time(self, oh: str, om: int, use_end: bool = False) -> datetime.time:
+        """
+        oh: hour range string like "2:00:00 - 3:00:00"
+        om: minute (0-59)
+        use_end: if True, use the ending hour; otherwise use starting hour
+        """
+        if oh is not None:
+            print(oh)
+            match = re.match(r"(\d{1,2})(?::(\d{1,2}))?(?::(\d{1,2}))?", oh)
+            parts = oh.split(':')
+            # print(parts)
+            # print(match.groups())
+           
+        
+        if use_end:
+            time_part = parts[1].strip()   # "3:00:00"
+        else:
+            time_part = parts[0].strip()   # "2:00:00"
+        
+        # split into components
+        h, m, s = map(int, time_part.split(':'))
+        
+        # replace minutes with given om
+        return datetime.time(h, om, 0)
+
+    
 
     def _parse_daily_variables_data(self):
         """
