@@ -87,7 +87,7 @@ class LaborFormParser:
         
         # The data structure is complex, with observation numbers across two sections.
         # We need to find all rows containing 'Sum'
-        sums_data = []
+        ws_data = {}
 
         observations = []
         counter = 0
@@ -96,12 +96,19 @@ class LaborFormParser:
         task_type = self.ws_ws['B15'].value
         project_code = self.ws_ws['B11'].value
         data_collector = f"{self.ws_ws['B21'].value} {self.ws_ws['C21'].value}"
-        print("########### project ################")
-        print(f"## Project Code: {project_code}")
-        print(f"## Date: {data_date}")
-        print(f"## location: {location}")
-        print(f"## task type: {task_type}")
-        print(f"## Data collector: {data_collector}")
+
+        ws_data['date'] = data_date
+        ws_data['location'] = location
+        ws_data['task type'] = task_type
+        ws_data['project code'] = project_code 
+        ws_data['data collector'] = data_collector
+
+        # print("########### project ################")
+        # print(f"## Project Code: {project_code}")
+        # print(f"## Date: {data_date}")
+        # print(f"## location: {location}")
+        # print(f"## task type: {task_type}")
+        # print(f"## Data collector: {data_collector}")
         for r in range(12, 60, 12):
             
             for i in range(0, 36):
@@ -117,16 +124,16 @@ class LaborFormParser:
                     "direct": self.ws_ws[f"{COL}{12+r-12}"].value,
                     "preparatory": self.ws_ws[f"{COL}{13+r-12}"].value, 
                     "tools and equipment": self.ws_ws[f"{COL}{r+14-12}"].value, 
-                    "Material handling": self.ws_ws[f"{COL}{r+15-12}"].value, 
-                    "Waiting": self.ws_ws[f"{COL}{r+16-12}"].value,
-                    "Travel": self.ws_ws[f"{COL}{r+17-12}"].value,
-                    "Personal": self.ws_ws[f"{COL}{r+18-12}"].value,
+                    "material handling": self.ws_ws[f"{COL}{r+15-12}"].value, 
+                    "waiting": self.ws_ws[f"{COL}{r+16-12}"].value,
+                    "travel": self.ws_ws[f"{COL}{r+17-12}"].value,
+                    "personal": self.ws_ws[f"{COL}{r+18-12}"].value,
                     "sum": self.ws_ws[f'{COL}{r+19-12}'].value,
                 }
                 observations.append(observation)
 
-        for ob in observations:
-            print("\n", ob)
+        ws_data['observations'] = observations
+        
 
         for row in self.ws_ws.iter_rows(values_only=True):
             """parse work sampling general data first"""
@@ -145,14 +152,9 @@ class LaborFormParser:
             except Exception as e:
                 raise e
              
-            if row[0] == 'Sum':
-                # The sums are in the columns starting from the 5th column
-                # The data is repeated for each crew observation
-                sums = [value for value in row[4:] if value is not None and isinstance(value, (int, float))]
-                if sums:
-                    sums_data.append(sums)
+            
         
-        return sums_data
+        return ws_data
 
     def _parse_daily_variables_data(self):
         """
