@@ -1,5 +1,8 @@
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter, get_column_interval
+from datetime import datetime, timedelta, time
+import re
+
 
 class LaborFormParser:
     def __init__(self, file):
@@ -27,9 +30,9 @@ class LaborFormParser:
         Returns a dictionary containing the parsed data from each sheet.
         """
         parsed_data = {
-            'labour_data': self._parse_labour_data(),
-            'work_sampling_data': self._parse_work_sampling_data(),
-            'daily_variables_data': self._parse_daily_variables_data()
+            'labour': self._parse_labour_data(),
+            'ws': self._parse_work_sampling_data(),
+            'dv': self._parse_daily_variables_data()
         }
         return parsed_data
 
@@ -109,28 +112,37 @@ class LaborFormParser:
         # print(f"## location: {location}")
         # print(f"## task type: {task_type}")
         # print(f"## Data collector: {data_collector}")
+
         for r in range(12, 60, 12):
-            
+            oh = None # instatiate observation hour to
             for i in range(0, 36):
                 COL = get_column_letter(i+6)
                 # print(COL)
                 cell = f"{COL}{r-3}"
+                
+                # read every cell of the row that could contain the observation hour
                 observation_hour = self.ws_ws[cell].value
+                if observation_hour is not None:
+                    oh = observation_hour
+                
+                observation_minute = self.ws_ws[f"{COL}{11+r-12}"].value
+                observation_time = self._get_observation_time(oh, observation_minute)
 
-                observation = {
-                    "observation_hour": observation_hour if observation_hour is not None else '',
-                    "observation": self.ws_ws[f"{COL}{10+r-12}"].value,
-                    "observation time": self.ws_ws[f"{COL}{11+r-12}"].value ,
-                    "direct": self.ws_ws[f"{COL}{12+r-12}"].value,
-                    "preparatory": self.ws_ws[f"{COL}{13+r-12}"].value, 
-                    "tools and equipment": self.ws_ws[f"{COL}{r+14-12}"].value, 
-                    "material handling": self.ws_ws[f"{COL}{r+15-12}"].value, 
-                    "waiting": self.ws_ws[f"{COL}{r+16-12}"].value,
-                    "travel": self.ws_ws[f"{COL}{r+17-12}"].value,
-                    "personal": self.ws_ws[f"{COL}{r+18-12}"].value,
-                    "sum": self.ws_ws[f'{COL}{r+19-12}'].value,
-                }
-                observations.append(observation)
+                if observation_minute is not None:
+                    observation = {
+                        # "observation_hour": oh,
+                        "observation number": self.ws_ws[f"{COL}{10+r-12}"].value,
+                        "observation time": observation_time ,
+                        "direct": self.ws_ws[f"{COL}{12+r-12}"].value,
+                        "preparatory": self.ws_ws[f"{COL}{13+r-12}"].value, 
+                        "tools and equipment": self.ws_ws[f"{COL}{r+14-12}"].value, 
+                        "Material handling": self.ws_ws[f"{COL}{r+15-12}"].value, 
+                        "Waiting": self.ws_ws[f"{COL}{r+16-12}"].value,
+                        "Travel": self.ws_ws[f"{COL}{r+17-12}"].value,
+                        "Personal": self.ws_ws[f"{COL}{r+18-12}"].value,
+                        "sum": self.ws_ws[f'{COL}{r+19-12}'].value,
+                    }
+                    observations.append(observation)
 
         ws_data['observations'] = observations
         
@@ -156,6 +168,36 @@ class LaborFormParser:
         
         return ws_data
 
+    def _get_observation_time(self, oh: str, om: int, use_end: bool = False) -> datetime.time:
+        """
+        oh: hour range string like "2:00:00 - 3:00:00"
+        om: minute (0-59)
+        use_end: if True, use the ending hour; otherwise use starting hour
+
+        """
+
+        try:
+            if oh is not None and om is not None:
+                # print(oh)
+                stime, etime = oh.split("-")
+                # print(f"start: {stime}, end: {etime}")
+                sh = oh.split(':')[0]
+                eh = oh.split(':')[0]
+
+                if use_end:
+                    hour = sh   # "3:00:00"
+                else:
+                    hour = eh   # "2:00:00"
+                
+                # split into components
+                # h, m, s = map(int, time_part.split(':'))
+        
+                return time(int(hour), int(om), 0)
+        except Exception as e:
+            pass 
+            raise ValueError("hour and minute cannot be None")
+
+
     def _parse_daily_variables_data(self):
         """
         Parses the 'daily_variables' sheet to extract all variables and their descriptions.
@@ -163,6 +205,16 @@ class LaborFormParser:
         if not self.dv_ws:
             return None
 
+        dv_data = {}
+        data_date = self.dv_ws['H6'].value
+        task_type = self.dv_ws['E5'].value
+        project_code = self.dv_ws['C5'].value
+        data_collector = f"{self.dv_ws['C6'].value}"
+
+        dv_data['date'] = data_date
+        dv_data['task type'] = task_type
+        dv_data['project code'] = project_code 
+        dv_data['data collector'] = data_collector
         variables = []
         # Data starts from row 6, and the variable name is in column 3
         # and description in column 6. The ID is in column 2.
@@ -173,22 +225,26 @@ class LaborFormParser:
                     'Factor ID': row[1],
                     'Sub-Factors': row[2],
                     'Scale of Measure': row[3],
-                    'Range of Value': row[4],
-                    'Description': row[5],
-                    'Value': row[6]
+                    "data source": row[4],
+                    'Data Value': row[5],
+                    'Range of Value': row[6],
+                    'Description': row[7],
+
                 }
                 variables.append(variable_data)
         
-        return variables
+        dv_data['variables'] = variables
+
+        return dv_data
 
 if __name__ == '__main__':
     # You would replace 'labor_records.xlsx' with your actual file path
     try:
         parser = LaborFormParser('05_05_2017_gedefaw labor_records_form.xlsx')
         parsed_results = parser.parse()
-        print(parsed_results.get('work_sampling_data'))
-        # print(parsed_results.get('work_sampling_data'))
-        # print(parsed_results.get('daily_variables_data'))
+        # print(parsed_results.get('ws'))
+        # print(parsed_results.get('labour'))
+        print(parsed_results.get('dv'))
         # You can now print the results to verify
         # for sheet_name, data in parsed_results.items():
         #     print(f"--- {sheet_name.replace('_', ' ').title()} ---")
