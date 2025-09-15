@@ -4,7 +4,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from io import BytesIO, StringIO
 import os
 import csv
-from core.models import Project, Engineer, Collector
+from core.models import Project, Engineer, Collector, DataInstance
 
 
 class InstanceDataParser:

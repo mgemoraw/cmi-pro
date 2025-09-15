@@ -1,7 +1,6 @@
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter, get_column_interval
 from datetime import datetime, timedelta, time
-import re
 
 
 class InstanceSummaryParser:
@@ -39,20 +38,22 @@ class InstanceSummaryParser:
         counter = 0
         for row in self.dam_ws.iter_rows(min_row=data_start_row, values_only=True):
             row_index = counter + data_start_row
-
+            
             instance = {
-                'No': self.ws[f"A{row_index}"].value,
-                'Date': self.ws[f"B{row_index}"].value,
-                'Project Code': self.ws[f"C{row_index}"].value,
-                'Data Collector': self.ws[f"D{row_index}"].value,
+                'no': self.ws[f"A{row_index}"].value,
+                'date': self.ws[f"B{row_index}"].value,
+                'project_code': self.ws[f"C{row_index}"].value,
+                'collector': self.ws[f"D{row_index}"].value,
                 'PID': self.ws[f"E{row_index}"].value,
-                'Particular': self.ws[f"F{row_index}"].value,
-                'Problems': self.ws[f"G{row_index}"].value,
-                'Status': self.ws[f"H{row_index}"].value,
+                'particular': self.ws[f"F{row_index}"].value,
+                'problems': self.ws[f"G{row_index}"].value,
+                'status': self.ws[f"H{row_index}"].value,
                 'PE': self.ws[f"I{row_index}"].value,
-                'Encoded': self.ws[f"J{row_index}"].value,
-                'Encoder': self.ws[f"K{row_index}"].value,
+                'encoded': self.ws[f"J{row_index}"].value,
+                'encoder': self.ws[f"K{row_index}"].value,
             }
+
+            
             counter += 1
             data.append(instance)
 
