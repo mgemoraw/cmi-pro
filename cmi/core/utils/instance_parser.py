@@ -87,4 +87,3 @@ class InstanceDataParser:
     
     def _parse_ws_instance(self):
         pass 
-    

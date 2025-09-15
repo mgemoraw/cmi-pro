@@ -236,13 +236,15 @@ class LaborFormParser:
         dv_data['variables'] = variables
 
         return dv_data
+    
+    
 
 if __name__ == '__main__':
     # You would replace 'labor_records.xlsx' with your actual file path
     try:
         parser = LaborFormParser('05_05_2017_gedefaw labor_records_form.xlsx')
         parsed_results = parser.parse()
-        # print(parsed_results.get('ws'))
+        print(parsed_results.get('ws'))
         # print(parsed_results.get('labour'))
         print(parsed_results.get('dv'))
         # You can now print the results to verify
