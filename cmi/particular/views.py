@@ -11,6 +11,7 @@ import csv
 # Create your views here.
 def index(request):
     particulars = Particular.objects.all()
+    
     sectors = ProjectType.objects.all()
     divisions = Division.objects.all()
     particular_form = ParticularForm()
@@ -47,6 +48,23 @@ def index(request):
 
 
     return render(request, 'particular/index.html', context=context)
+
+def update_instances(request):
+    from core.models import DataInstance
+    from django.db.models import Count
+
+    particulars = Particular.objects.annotate(
+        instance_count=Count('instance_particular')
+    )
+
+    for particular in particulars:
+        particular.collected_instances = particular.instance_count
+        particular.progress = particular.collected_instances/80 * 100
+        particular.save()
+
+
+    return redirect('particular:particulars')
+
 
 def particulars_view(request):
     particulars = Particular.objects.all()

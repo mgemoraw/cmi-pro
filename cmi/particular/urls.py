@@ -13,5 +13,6 @@ urlpatterns = [
     path('create_project/', views.create_project_sector, name="create_project"),
     path('import/', views.import_from_file, name='import_from_file'),
     path('equipments/create/', views.create_equipment, name='create_equipment'),
+    path('list/update-instances', views.update_instances, name='update-instances'),
 ]
 
