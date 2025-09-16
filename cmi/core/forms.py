@@ -110,6 +110,7 @@ class DataInstanceForm(forms.ModelForm):
 
         labels = {
             'project': 'Project',
+            'project_type': 'Project Type',
             'collector': 'Data Collector',
             # 'task': 'Task',
             # 'element': 'Element',
@@ -125,6 +126,7 @@ class DataInstanceForm(forms.ModelForm):
 
         widgets = {
             'project': forms.Select(attrs={'class': 'form-select'}),
+            'project_type': forms.Select(attrs={'class': 'form-select'}),
             'collector': forms.Select(attrs={'class': 'form-select'}),
             'particular': forms.Select(attrs={'class': 'form-select'}),
             'status': forms.RadioSelect(attrs={'class': 'form-check-inline'}),

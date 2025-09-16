@@ -55,6 +55,52 @@
   </div>
 
 
+  <!-- Data Instances Table -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm p-3 mb-3">
+        <h5 class="card-title">Data Instances</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Project</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Collector</th>
+              <th>Particular</th>
+              <th>Review Comments</th>
+              <th>Status</th>
+              <th>Engineer</th>
+              <th>Encoded</th>
+              <th>Encoder</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for instance in instances %}
+            <tr>
+              <td>{{instance.id}}</td>
+              <td>{{instance.project.name}}</td>
+              <td>{{instance.project_type.name}}</td>
+              <td>{{instance.date}}</td>
+              <td>{{instance.collector}}</td>
+
+              <td>{{instance.particular}}</td>
+              <td>{{instance.review_comments}}</td>
+              <td>{{instance.status}}</td>
+              <td>{{instance.engineer}}</td>
+              <td>{{instance.encoded}}</td>
+              <td>{{instance.encoder}}</td>
+            </tr>
+            {% endfor %}
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 <!-- Add Instance Modal -->
  <div id="instanceFormModal" class="modal fade" tabindex="-2" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

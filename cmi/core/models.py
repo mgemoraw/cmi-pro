@@ -47,7 +47,7 @@ class Collector(models.Model):
     fname = models.CharField(max_length=100)
     mname = models.CharField(max_length=100)
     lname = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15, unique=True)
+    phone = models.CharField(max_length=15, unique=False)
     
     def __str__(self):
         return f"{self.fname} {self.mname}"
@@ -429,10 +429,11 @@ class DataInstance(models.Model):
         PENDING = 'pending', 'Pending'
 
     project = models.ForeignKey('Project', on_delete=models.PROTECT, related_name='instance_project')
+    project_type = models.ForeignKey('particular.ProjectType', on_delete=models.CASCADE, related_name="project_type", null=True)
     collector = models.ForeignKey('Collector', on_delete=models.CASCADE, related_name='data_collector')
-    
+    engineer = models.ForeignKey('Engineer', on_delete=models.CASCADE, related_name="assigned_engineer", null=True)
     particular = models.ForeignKey(Particular, on_delete=models.CASCADE, related_name='instance_particular')
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(null=True, blank=True)
 
     status = models.CharField(max_length=15, choices=InstanceChoices, default=InstanceChoices.PENDING)
     encoded = models.BooleanField(default=False)
@@ -443,5 +444,16 @@ class DataInstance(models.Model):
 
     raw_file = models.FileField(upload_to=instance_raw_file_path, null=True, blank=True)
     encoded_file = models.FileField(upload_to=instance_encoded_file_path, null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["date", "particular", "collector", "project"],
+                name="unique_instance"
+            )
+        ]
 
 

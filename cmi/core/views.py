@@ -17,7 +17,8 @@ from .models import (
     Task,
 )
 from particular.models import Particular
-from .services import  ProjectDataParser, ProjectDataTemplateGenerator
+from .services import  InstanceDataMapper, ProjectDataParser, ProjectDataTemplateGenerator
+from .utils.instance_summary_parser import InstanceSummaryParser
 from core.utils.instance_parser import InstanceDataParser
 
 
@@ -81,6 +82,7 @@ def create_instance_view(request):
 
 def import_instances(request):
     context = {}
+    
     if request.method == "POST":
         uploaded_file = request.FILES.get("dataFile")
         # print(record_type)
@@ -91,8 +93,8 @@ def import_instances(request):
                 messages.error(request, 'No file selected')
                 return redirect('core:instances')
             
-            parser = ProjectDataParser(data_file=uploaded_file, data_type='instance')
-            parsed_data = parser.parse()
+            mapper = InstanceDataMapper(file=uploaded_file)
+            mapper.save()         
 
             messages.success(request, "Instance Records uploaded")
             return redirect('core:instances')
@@ -101,7 +103,7 @@ def import_instances(request):
             messages.error(request, "Please upload file")
             return HttpResponse(str(e), status=400)
         
-    return render(request, 'core/instance_dashboard.html', context)
+    return redirect("core:instances")
 
 
 
