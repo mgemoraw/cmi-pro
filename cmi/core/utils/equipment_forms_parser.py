@@ -60,7 +60,7 @@ class EquipmentFormsParser:
 
     def _parse_truck_data(self):
         """
-        Parses the 'labour' sheet to extract key labor productivity data.
+        Parses the 'truck' sheet to extract key truck productivity data.
         """
         if not self.equipment_ws:
             return None
@@ -103,7 +103,7 @@ class EquipmentFormsParser:
 
     def _parse_dozer_data(self):
         """
-        Parses the 'labour' sheet to extract key labor productivity data.
+        Parses the 'dozer' sheet to extract key dozer productivity data.
         """
         if not self.equipment_ws:
             return None
@@ -149,7 +149,7 @@ class EquipmentFormsParser:
 
     def _parse_excavator_data(self):
         """
-        Parses the 'labour' sheet to extract key labor productivity data.
+        Parses the 'excavator' sheet to extract key excavator productivity data.
         """
         if not self.equipment_ws:
             return None
@@ -199,7 +199,7 @@ class EquipmentFormsParser:
 
     def _parse_mpdm_data(self):
         """
-        Parses the 'labour' sheet to extract key labor productivity data.
+        Parses the 'mpdm' sheet to extract key mpdm data.
         """
         if not self.mpdm_ws:
             return None
@@ -289,3 +289,4 @@ if __name__ == "__main__":
     print(f'parsing {parser.equipment_type} data...')
     print(data.get(parser.equipment_type))
     print(data.get("mpdm"))
+
