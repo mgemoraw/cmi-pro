@@ -61,6 +61,7 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
+
 class Productivity(models.Model):
     collector = models.ForeignKey("Collector", on_delete=models.CASCADE)
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
