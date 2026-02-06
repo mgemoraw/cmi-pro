@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 from particular.views import particular_list
 
-
+ 
 app_name = 'core'
 
 urlpatterns = [

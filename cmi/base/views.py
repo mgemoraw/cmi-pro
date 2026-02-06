@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from .forms import DataInstanceForm
+
 # Create your views here.
 def home(request):
     return render(request, 'base/home.html')
@@ -42,4 +44,15 @@ def profile(request):
 
 def register(request):
     return render(request, 'base/register.html')
+
+
+def settings(request):
+    return render(request, 'base/settings.html')
+
+def data_instance(request):
+    forms = DataInstanceForm()  # Placeholder for future form handling logic
+    context = {
+        'forms': forms,
+    }
+    return render(request, 'base/data_instance.html', context=context)
 

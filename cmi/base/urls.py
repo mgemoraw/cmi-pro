@@ -12,4 +12,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('services/', views.services, name='services'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('settings/', views.settings, name='settings'),
+    path('data-instance/', views.data_instance, name='data_instance'),
 ]
