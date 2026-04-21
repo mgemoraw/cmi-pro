@@ -288,5 +288,5 @@ if __name__ == "__main__":
 
     print(f'parsing {parser.equipment_type} data...')
     print(data.get(parser.equipment_type))
-    print(data.get("mpdm"))
+    # print("mpdm data: ", data.get("mpdm"))
 
