@@ -1,0 +1,157 @@
+{% block sidebar %}
+
+<!-- 🔷 Sidebar -->
+<aside id="sidebar" class="app-sidebar">
+
+  <!-- Brand -->
+  <div class="sidebar-brand d-flex align-items-center justify-content-between">
+    <span class="brand-text">CMI-Pro</span>
+    <button class="btn btn-sm d-lg-none text-white" onclick="toggleSidebar()">✕</button>
+  </div>
+
+  <!-- Core -->
+  <div class="sidebar-section">Core</div>
+
+  <a href="{% url 'dashboard' %}"
+     class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}">
+    <i class="bi bi-speedometer2"></i>
+    <span>Dashboard</span>
+  </a>
+
+  <a href="{% url 'core:instances' %}"
+     class="nav-link {% if 'instances' in request.path %}active{% endif %}">
+    <i class="bi bi-database"></i>
+    <span>Data Instances</span>
+  </a>
+
+  <!-- Management -->
+  <div class="sidebar-section">Management</div>
+
+  <a href="{% url 'particular:particulars' %}"
+     class="nav-link {% if 'particular' in request.path %}active{% endif %}">
+    <i class="bi bi-list-check"></i>
+    <span>Particulars</span>
+  </a>
+
+  <a href="{% url 'settings' %}"
+     class="nav-link {% if 'settings' in request.path %}active{% endif %}">
+    <i class="bi bi-gear"></i>
+    <span>Settings</span>
+  </a>
+
+  <!-- Support -->
+  <div class="sidebar-section">Support</div>
+
+  <a href="{% url 'contact' %}"
+     class="nav-link {% if 'contact' in request.path %}active{% endif %}">
+    <i class="bi bi-envelope"></i>
+    <span>Contact</span>
+  </a>
+
+  <!-- Footer -->
+  <div class="sidebar-footer mt-auto px-3 pb-3">
+    <small class="text-muted">v1.0 • CMI-Pro</small>
+  </div>
+
+</aside>
+
+
+<!-- 🔷 Topbar -->
+<div class="app-topbar d-flex justify-content-between align-items-center">
+
+  <!-- Left -->
+  <div class="d-flex align-items-center gap-2">
+
+    <button class="btn btn-light btn-sm shadow-sm" onclick="toggleSidebar()">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Search -->
+    <div class="position-relative">
+      <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"></i>
+      <input class="form-control form-control-sm ps-4 search-box"
+             placeholder="Search anything...">
+    </div>
+
+  </div>
+
+  <!-- Right -->
+  <div class="d-flex align-items-center gap-3">
+
+    <!-- Notifications -->
+    <div class="position-relative cursor-pointer">
+      <i class="bi bi-bell fs-5"></i>
+      <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">3</span>
+    </div>
+
+    <!-- User -->
+    {% if user.is_authenticated %}
+    <div class="dropdown">
+
+      <a class="d-flex align-items-center gap-2 text-decoration-none"
+         href="#" data-bs-toggle="dropdown">
+
+        <i class="bi bi-person-circle fs-4"></i>
+        <span class="d-none d-md-inline">{{ user.username }}</span>
+
+      </a>
+
+      <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+
+        <li class="px-3 py-2 text-muted small">
+          Signed in as <strong>{{ user.username }}</strong>
+        </li>
+
+        <li><hr class="dropdown-divider"></li>
+
+        <li>
+          <a class="dropdown-item" href="{% url 'profile' %}">
+            <i class="bi bi-person me-2"></i> Profile
+          </a>
+        </li>
+
+        <li>
+          <a class="dropdown-item" href="{% url 'settings' %}">
+            <i class="bi bi-gear me-2"></i> Settings
+          </a>
+        </li>
+
+        <li><hr class="dropdown-divider"></li>
+
+        <li>
+          <a class="dropdown-item text-danger" href="{% url 'logout' %}">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+          </a>
+        </li>
+
+      </ul>
+    </div>
+    {% endif %}
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js%}
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+
+  sidebar.classList.toggle("collapsed");
+  sidebar.classList.toggle("show");
+
+  // Persist state
+  localStorage.setItem("sidebar", sidebar.classList.contains("collapsed"));
+}
+
+// Load state
+document.addEventListener("DOMContentLoaded", () => {
+  const collapsed = localStorage.getItem("sidebar") === "true";
+  if (collapsed) {
+    document.getElementById("sidebar").classList.add("collapsed");
+  }
+});
+</script>
+{% endblock %}

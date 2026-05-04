@@ -8,21 +8,38 @@
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <link rel="stylesheet" href="{% static 'css/login.css' %}">
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/output.css' %}">
         
         {% block extra_head %}{% endblock %}
     </head>
-    <body>  
+    <body> 
+
+        
         <header>
             {% include 'navbar.html' %}
             
         </header>
-        <main class="container mt-4">
-            {% include 'core/notifications.html' %}
-            {% block content %}
-            <!-- Content will be injected here -->
-            {% endblock %}
+
+    
+
+        <main class="flex">
+            
+            <!-- Sidebar -->
+            <div class="app-sidebar">
+                {% block sidebar %}
+                {% include 'sidebar.html' %}
+                {% endblock %}
+            </div>
+            
+            <div class="app-content container mt-4">
+                {% block content %}
+                <!-- Content will be injected here -->
+                {% endblock %}
+            </div>
             
         </main>
+            {% include 'core/notifications.html' %}
+
         <footer class="text-center mt-4">
             <p>&copy; 2025 Mengistu Getie. All rights reserved.</p>
         </footer>
@@ -34,7 +51,6 @@
         <script src={%static 'js/htmx.min.js' %}> </script>
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
 
     </body>
 </html>

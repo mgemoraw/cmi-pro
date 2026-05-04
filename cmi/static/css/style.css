@@ -32,3 +32,71 @@
 .toast {
     z-index: 1090;
 }
+
+
+/* ===== Layout Engine ===== */
+
+body {
+  background: #f8fafc;
+}
+
+/* Sidebar Layout */
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand */
+.sidebar-brand {
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+/* Links */
+.app-sidebar .nav-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Active indicator */
+.app-sidebar .nav-link.active {
+  background: #1e293b;
+  border-left: 3px solid #0d6efd;
+  padding-left: 17px;
+}
+
+/* Hover */
+.app-sidebar .nav-link:hover {
+  transform: translateX(3px);
+}
+
+/* Footer */
+.sidebar-footer {
+  margin-top: auto;
+  opacity: 0.6;
+}
+
+/* Topbar */
+.app-topbar {
+  backdrop-filter: blur(6px);
+}
+
+/* Search */
+.search-box {
+  width: 220px;
+}
+
+/* Collapsed Mode */
+.app-sidebar.collapsed .brand-text,
+.app-sidebar.collapsed span {
+  display: none;
+}
+
+/* Smooth */
+.app-sidebar,
+.app-topbar,
+main.container {
+  transition: all 0.25s ease;
+}

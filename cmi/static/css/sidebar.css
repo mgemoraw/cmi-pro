@@ -1,0 +1,19 @@
+/* default */
+.sidebar {
+    width: 260px;
+}
+
+/* collapsed */
+.sidebar.collapsed {
+    width: 70px;
+}
+
+/* hide text when collapsed */
+.sidebar.collapsed span {
+    display: none;
+}
+
+/* smooth animation */
+.sidebar {
+    transition: width 0.3s ease;
+}

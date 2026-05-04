@@ -22,21 +22,14 @@
 </style>
 {% endblock %}
 
+{% block sidebar %}
+{% include 'base/base_sidebar.html'%}
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
   <div class="row">
-    <!-- Sidebar -->
-    <nav class="col-md-2 d-none d-md-block sidebar py-4">
-      <div class="nav flex-column">
-        <h4 class="text-white text-center mb-4">CMI-Pro</h4>
-        <a class="nav-link active" href="#"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
-        <a class="nav-link" href="#"><i class="fas fa-truck me-2"></i> Truck</a>
-        <a class="nav-link" href="#"><i class="fas fa-dumpster me-2"></i> Excavator</a>
-        <a class="nav-link" href="#"><i class="fas fa-industry me-2"></i> Dozer</a>
-        <a class="nav-link" href="#"><i class="fas fa-users me-2"></i> Labor</a>
-        <a class="nav-link" href="#"><i class="fas fa-tasks me-2"></i> Work Items</a>
-      </div>
-    </nav>
+    
 
     <!-- Main content -->
     <main class="col-md-10 ms-sm-auto px-md-4">

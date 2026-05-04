@@ -1,0 +1,164 @@
+{% block extra_css%}
+<style>
+/* ===== Sidebar Container ===== */
+.app-sidebar {
+  position: fixed;
+  top: 60px; /* adjust if navbar height differs */
+  left: 0;
+  width: 240px;
+  height: calc(100vh - 60px);
+  background: #0f172a;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+/* Header */
+.sidebar-header {
+  padding: 15px 20px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Sections */
+.sidebar-section {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #64748b;
+  padding: 10px 20px;
+}
+
+/* Links */
+.sidebar-nav {
+  flex-grow: 1;
+}
+
+.app-sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 5px 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+/* Icons */
+.app-sidebar .nav-link i {
+  width: 18px;
+  text-align: center;
+}
+
+/* Hover */
+.app-sidebar .nav-link:hover {
+  background: #1e293b;
+  color: #fff;
+  transform: translateX(3px);
+}
+
+/* Active */
+.app-sidebar .nav-link.active {
+  background: #1e293b;
+  color: #fff;
+  border-left: 3px solid #0d6efd;
+  padding-left: 11px;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 15px 20px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Push main content */
+main.container {
+  margin-left: 250px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-sidebar {
+    left: -250px;
+  }
+
+  .app-sidebar.show {
+    left: 0;
+  }
+
+  main.container {
+    margin-left: 0;
+  }
+}
+</style>
+{% endblock %}
+
+
+<aside id="sidebar" class="app-sidebar">
+
+  <!-- 🔷 Brand -->
+  <div class="sidebar-header">
+    <h5 class="mb-0">CMI-Pro</h5>
+  </div>
+
+  <!-- 🔷 Navigation -->
+  <nav class="sidebar-nav">
+
+    <!-- Main -->
+    <div class="sidebar-section">Main</div>
+
+    <a href="{% url 'dashboard' %}"
+       class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}">
+      <i class="fas fa-chart-line"></i>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="{% url 'work_items' %}"
+       class="nav-link {% if 'work_items' in request.path %}active{% endif %}">
+      <i class="fas fa-tasks"></i>
+      <span>Work Items</span>
+    </a>
+
+    <!-- Resources -->
+    <div class="sidebar-section">Resources</div>
+
+    <a href="{% url 'particular:particulars' %}"
+       class="nav-link {% if 'particular' in request.path %}active{% endif %}">
+      <i class="fas fa-list-check"></i>
+      <span>Particulars</span>
+    </a>
+
+    <a href="{% url 'equipment' %}"
+       class="nav-link {% if 'equipment' in request.path %}active{% endif %}">
+      <i class="fas fa-truck"></i>
+      <span>Equipment</span>
+    </a>
+
+    <a href="{% url 'labor' %}"
+       class="nav-link {% if 'labor' in request.path %}active{% endif %}">
+      <i class="fas fa-users"></i>
+      <span>Labor</span>
+    </a>
+
+  </nav>
+
+  <!-- 🔷 Footer -->
+  <div class="sidebar-footer">
+    <small>CMI-Pro v1.0</small>
+  </div>
+
+</aside>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+</script>   
+
+
+

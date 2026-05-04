@@ -56,3 +56,18 @@ def data_instance(request):
     }
     return render(request, 'base/data_instance.html', context=context)
 
+
+def equipment(request):
+    return render(request, 'base/equipments.html')   
+
+
+
+def work_items(request):
+    return render(request, 'base/work_items.html')
+
+def work_orders(request):
+    return render(request, 'base/work_orders.html')
+
+def reports(request):
+    return render(request, 'base/reports.html') 
+

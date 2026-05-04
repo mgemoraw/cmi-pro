@@ -1,0 +1,120 @@
+<nav class=" md:flex md:flex-col md:w-64 md:h-screen md:fixed md:bg-slate-900 md:text-slate-200 md:py-6 md:px-3">
+
+    <!-- Brand -->
+    <a href="{% url 'core:dashboard' %}"
+       class="flex items-center justify-center mb-6 text-xl font-bold text-white hover:text-blue-400 transition">
+        CMI-Pro
+    </a>
+
+    <!-- Navigation -->
+    <div class="flex flex-col gap-1">
+
+        <!-- Dashboard -->
+        <a href="{% url 'core:dashboard' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-chart-line w-5 text-center"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <!-- Projects -->
+        <a href="{% url 'core:projects' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/projects/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-folder w-5 text-center"></i>
+            <span>Projects</span>
+        </a>
+
+        <!-- Particulars -->
+        <a href="{% url 'core:particulars' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/particulars/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-list w-5 text-center"></i>
+            <span>Particulars</span>
+        </a>
+
+        <!-- Instances -->
+        <a href="{% url 'core:instances' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/instances/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-database w-5 text-center"></i>
+            <span>Instances</span>
+        </a>
+
+        <!-- Work Items -->
+        <a href="{% url 'core:work-items' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition">
+            <i class="fas fa-tasks w-5 text-center"></i>
+            <span>Work Items</span>
+        </a>
+
+        <!-- Equipment Section -->
+        <div class="mt-4 text-xs uppercase text-slate-500 px-4">
+            Equipment
+        </div>
+
+        <a href="{% url 'core:truck' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/truck/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-truck w-5 text-center"></i>
+            <span>Truck</span>
+        </a>
+
+        <a href="{% url 'core:excavator' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/excavator/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-dumpster w-5 text-center"></i>
+            <span>Excavator</span>
+        </a>
+
+        <a href="{% url 'core:dozer' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/dozer/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-tractor w-5 text-center"></i>
+            <span>Dozer</span>
+        </a>
+
+        <a href="{% url 'core:labor' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/labor/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-users w-5 text-center"></i>
+            <span>Labor</span>
+        </a>
+
+        <a href="{% url 'core:work-sampling' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/work-sampling/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-industry w-5 text-center"></i>
+            <span>Work Sampling</span>
+        </a>
+
+        <!-- Settings -->
+        <a href="{% url 'core:settings' %}"
+           class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition
+           {% if request.path == '/bit/settings/' %}bg-slate-800 text-white{% endif %}">
+            <i class="fas fa-cogs w-5 text-center"></i>
+            <span>Settings</span>
+        </a>
+
+        <!-- Auth -->
+        <div class="mt-4 border-t border-slate-700 pt-3">
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'core:user-logout' %}"
+               class="flex items-center gap-3 px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition">
+                <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                <span>Logout</span>
+            </a>
+            {% else %}
+            <a href="{% url 'core:user-login' %}"
+               class="flex items-center gap-3 px-4 py-2 rounded-lg text-green-400 hover:bg-green-500/10 transition">
+                <i class="fas fa-sign-in-alt w-5 text-center"></i>
+                <span>Login</span>
+            </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
