@@ -1,11 +1,11 @@
 
 from config import CONFIG
-from xlsx_processor import ExcelProcessor
+from xlsx_processor import XLSXProcessor
 from pathlib import Path
 import os
 import zipfile
 from openpyxl import load_workbook
-from xlsx_processor import ExcelProcessor, get_args, get_excel_files
+from xlsx_processor import XLSXProcessor, get_args, get_excel_files
 from config import CONFIG
 
 def main():
@@ -19,7 +19,7 @@ def main():
 
     print(f"Found {len(files)} files")
 
-    processor = ExcelProcessor(template_path, CONFIG)
+    processor = XLSXProcessor(template_path, CONFIG)
 
     outputs = processor.process_files(files, output_dir)
 
@@ -31,7 +31,7 @@ def main():
 # if __name__ == "__main__":
 #     main()
 
-processor = ExcelProcessor(
+processor = XLSXProcessor(
     template_path="target_template.xlsx",
     config=CONFIG
 )
@@ -42,9 +42,10 @@ source_files = [
 ]
 
 # Step 1: process
-outputs = processor.process_files(source_files, "outputs")
+outputs = processor.process(source_files, "outputs")
 
 # Step 2: zip
 zip_file = processor.zip_outputs(outputs)
 
 print("Generated:", zip_file)
+  
